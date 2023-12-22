@@ -1,6 +1,6 @@
-using Dysts
+using ChaoticDynamicalSystemLibrary
 using Test
 
-@testset "Dysts.jl" begin
+@testset "ChaoticDynamicalSystemLibrary.jl" begin
     # Write your tests here.
 end

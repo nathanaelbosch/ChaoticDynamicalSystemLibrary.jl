@@ -1,3 +1,4 @@
 [deps]
+ChaoticDynamicalSystemLibrary = "55704126-756f-498a-a54f-434b72ecbddd"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-Dysts = "55704126-756f-498a-a54f-434b72ecbddd"
+LiveServer = "16fef848-5104-11e9-1b77-fb7a48bbb589"

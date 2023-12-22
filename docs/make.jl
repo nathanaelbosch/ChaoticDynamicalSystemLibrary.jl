@@ -1,18 +1,19 @@
-using Dysts
+using ChaoticDynamicalSystemLibrary
 using Documenter
 
-DocMeta.setdocmeta!(Dysts, :DocTestSetup, :(using Dysts); recursive=true)
+DocMeta.setdocmeta!(ChaoticDynamicalSystemLibrary, :DocTestSetup, :(using ChaoticDynamicalSystemLibrary); recursive=true)
 
 makedocs(;
-    modules=[Dysts],
+    modules=[ChaoticDynamicalSystemLibrary],
     authors="Nathanael Bosch <nathanael.bosch@uni-tuebingen.de> and contributors",
-    repo="https://github.com/nathanaelbosch/Dysts.jl/blob/{commit}{path}#{line}",
-    sitename="Dysts.jl",
+    repo="https://github.com/nathanaelbosch/ChaoticDynamicalSystemLibrary.jl/blob/{commit}{path}#{line}",
+    sitename="ChaoticDynamicalSystemLibrary.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://nathanaelbosch.github.io/Dysts.jl",
+        canonical="https://nathanaelbosch.github.io/ChaoticDynamicalSystemLibrary.jl",
         edit_link="main",
         assets=String[],
+        size_threshold_ignore = ["index.md"],
     ),
     pages=[
         "Home" => "index.md",
@@ -20,6 +21,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/nathanaelbosch/Dysts.jl",
+    repo="github.com/nathanaelbosch/ChaoticDynamicalSystemLibrary.jl",
     devbranch="main",
 )
