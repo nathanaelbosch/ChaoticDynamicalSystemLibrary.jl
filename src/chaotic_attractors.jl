@@ -3730,6 +3730,9 @@ class BeerRNN(DynSys):
 """
 @doc make_docstring(BeerRNN) BeerRNN
 function BeerRNN()
+    function sig(x)
+        return 1.0 / (1.0 + exp(-x))
+    end
     function rhs(du, u, p, t)
         w, theta, tau = p
         du .= (-u + w * sig.(u + theta)) / tau
@@ -3738,7 +3741,7 @@ function BeerRNN()
     p = dict_to_componentarray(ATTRACTOR_DATA["BeerRNN"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,p)
+    prob = ODEProblem(f, u0, tspan, p,)
     return prob
 end
 
