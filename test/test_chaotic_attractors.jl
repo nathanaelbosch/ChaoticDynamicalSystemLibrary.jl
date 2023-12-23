@@ -130,8 +130,8 @@ using SafeTestsets
 
         prob = @test_nowarn System()
         @test prob isa ODEProblem
-        # @test_nowarn solve(prob, Tsit5())
-        @test solve(prob, Tsit5()) isa ODESolution
+        @test_nowarn solve(prob, Tsit5())
+        @test_nowarn solve(prob, Tsit5(), tspan=(0.0, 100.0), abstol=1e-6, reltol=1e-4)
     end
 
 end

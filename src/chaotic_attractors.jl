@@ -3137,10 +3137,10 @@ function CellCycle()
         V3 = m1 * Vm3
         U3 = m2 * Um3
         du[1] = vi1 * Kim1 / (Kim1 + m2) - vd1 * x1 * c1 / (Kd1 + c1) - kd1 * c1
-        du[2] = vi2 * Kim2 / (Kim2 + m1) - vd2 * x2 * c2 / (Kd2 + c2) - kd2 * c2
-        du[3] = V1 * (1 - m1) / (K1 + (1 - m1)) - V2 * m1 / (K2 + m1)
-        du[4] = U1 * (1 - m2) / (H1 + (1 - m2)) - U2 * m2 / (H2 + m2)
-        du[5] = V3 * (1 - x1) / (K3 + (1 - x1)) - V4 * x1 / (K4 + x1)
+        du[4] = vi2 * Kim2 / (Kim2 + m1) - vd2 * x2 * c2 / (Kd2 + c2) - kd2 * c2
+        du[2] = V1 * (1 - m1) / (K1 + (1 - m1)) - V2 * m1 / (K2 + m1)
+        du[5] = U1 * (1 - m2) / (H1 + (1 - m2)) - U2 * m2 / (H2 + m2)
+        du[3] = V3 * (1 - x1) / (K3 + (1 - x1)) - V4 * x1 / (K4 + x1)
         du[6] = U3 * (1 - x2) / (H3 + (1 - x2)) - U4 * x2 / (H4 + x2)
     end
     u0 = Float64.(ATTRACTOR_DATA["CellCycle"]["initial_conditions"])
@@ -3428,8 +3428,8 @@ function ForcedVanDerPol()
     function rhs(du, u, p, t)
         x, y, z = u
         @unpack a, mu, w = p
-        du[1] = mu * (1 - x^2) * y - x + a * sin(z)
-        du[2] = y
+        du[2] = mu * (1 - x^2) * y - x + a * sin(z)
+        du[1] = y
         du[3] = w
     end
     u0 = Float64.(ATTRACTOR_DATA["ForcedVanDerPol"]["initial_conditions"])
