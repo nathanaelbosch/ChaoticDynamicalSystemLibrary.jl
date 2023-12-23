@@ -17,6 +17,7 @@ JSON = "0.21"
 LinearAlgebra = "1"
 Markdown = "1"
 SciMLBase = "1,2"
+SimpleUnPack = "1"
 Test = "1"
 julia = "1.6"
 
