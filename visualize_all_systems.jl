@@ -1,7 +1,6 @@
 using ChaoticDynamicalSystemLibrary, OrdinaryDiffEq, Plots
 
-ALL_SYSTEMS = (
-    ChaoticDynamicalSystemLibrary.Aizawa,
+ALL_SYSTEMS = (ChaoticDynamicalSystemLibrary.Aizawa,
     ChaoticDynamicalSystemLibrary.AnishchenkoAstakhov,
     ChaoticDynamicalSystemLibrary.Arneodo,
     ChaoticDynamicalSystemLibrary.ArnoldBeltramiChildress,
@@ -119,19 +118,17 @@ ALL_SYSTEMS = (
     ChaoticDynamicalSystemLibrary.WindmiReduced,
     ChaoticDynamicalSystemLibrary.YuWang,
     ChaoticDynamicalSystemLibrary.YuWang2,
-    ChaoticDynamicalSystemLibrary.ZhouChen
-)
+    ChaoticDynamicalSystemLibrary.ZhouChen)
 wait_for_key(prompt) = (print(stdout, prompt); read(stdin, 1); nothing)
 for system in ALL_SYSTEMS
     @info "$system"
     prob = system()
     # sol = solve(prob, Tsit5(), tspan=(0, 1000))
-    sol = solve(prob, Tsit5(), abstol=1e-7, reltol=1e-5)
+    sol = solve(prob, Tsit5(), abstol = 1e-7, reltol = 1e-5)
     # p = plot(sol)
-    p = plot(sol, layout=(length(sol.u[1]), 1), xlabel="", xticks=false,
-             color=collect(1:length(sol.u[1]))', legend=false,
-             title=[i==1 ? "$system" : "" for i in 1:length(sol.u[1])] |> permutedims,
-             )
+    p = plot(sol, layout = (length(sol.u[1]), 1), xlabel = "", xticks = false,
+        color = collect(1:length(sol.u[1]))', legend = false,
+        title = [i == 1 ? "$system" : "" for i in 1:length(sol.u[1])] |> permutedims)
     display(p)
     wait_for_key("Press any key to continue")
 end

@@ -1135,7 +1135,8 @@ function KawczynskiStrizhak()
 end
 
 function BelousovZhabotinsky end
-originalcode(::typeof(BelousovZhabotinsky)) = """
+function originalcode(::typeof(BelousovZhabotinsky))
+    """
 class BelousovZhabotinsky(DynSys):
     @staticjit
     def _rhs(
@@ -1151,6 +1152,7 @@ class BelousovZhabotinsky(DynSys):
         vdot = c10 * x * ybar + c11 * ybar + c12 * x ** 2 + c13 * z * v - kf * v
         return xdot * t0, zdot * t0, vdot * t0
 """
+end
 @doc make_docstring(BelousovZhabotinsky) BelousovZhabotinsky
 function BelousovZhabotinsky()
     function rhs(du, u, p, t)
@@ -3340,7 +3342,7 @@ function Aizawa()
         du[1] = x * z - b * x - d * y
         du[2] = d * x + y * z - b * y
         du[3] = c + a * z - 1 / 3 * z^3 - x^2 - y^2 - e * z * x^2 - e * z * y^2 +
-            f * z * x^3
+                f * z * x^3
     end
     u0 = Float64.(ATTRACTOR_DATA["Aizawa"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Aizawa"]["parameters"])
@@ -3923,7 +3925,7 @@ function MacArthur()
     function growth_rate(rr, k, r)
         u0 = rr ./ (k .+ rr)
         u = r .* u0'
-        return minimum(u, dims=2)
+        return minimum(u, dims = 2)
     end
     function rhs(du, u, p, t)
         @views nn, rr = u[1:5], u[6:10]

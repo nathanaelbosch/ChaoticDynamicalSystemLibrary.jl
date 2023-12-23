@@ -27,7 +27,6 @@ function format_parameters(params::Dict)
     return ComponentArray(intermediate_dict)
 end
 
-
 function make_docstring(f)
     data = ATTRACTOR_DATA[string(f)]
     header = """

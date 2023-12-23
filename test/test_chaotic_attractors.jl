@@ -1,13 +1,11 @@
 using SafeTestsets
 
 @safetestset "Test Chaotic Attractors" begin
-
     using ChaoticDynamicalSystemLibrary
     using Test
     using OrdinaryDiffEq
 
-    @testset "$System" for System in (
-        ChaoticDynamicalSystemLibrary.Aizawa,
+    @testset "$System" for System in (ChaoticDynamicalSystemLibrary.Aizawa,
         ChaoticDynamicalSystemLibrary.AnishchenkoAstakhov,
         ChaoticDynamicalSystemLibrary.Arneodo,
         ChaoticDynamicalSystemLibrary.ArnoldBeltramiChildress,
@@ -125,12 +123,9 @@ using SafeTestsets
         ChaoticDynamicalSystemLibrary.WindmiReduced,
         ChaoticDynamicalSystemLibrary.YuWang,
         ChaoticDynamicalSystemLibrary.YuWang2,
-        ChaoticDynamicalSystemLibrary.ZhouChen,
-        )
-
+        ChaoticDynamicalSystemLibrary.ZhouChen)
         prob = @test_nowarn System()
         @test prob isa ODEProblem
-        @test_nowarn solve(prob, Tsit5(), abstol=1e-6, reltol=1e-4)
+        @test_nowarn solve(prob, Tsit5(), abstol = 1e-6, reltol = 1e-4)
     end
-
 end
