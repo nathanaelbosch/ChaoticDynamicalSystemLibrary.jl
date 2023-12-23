@@ -16,9 +16,12 @@ using SafeTestsets
         ChaoticDynamicalSystemLibrary.BickleyJet,
         ChaoticDynamicalSystemLibrary.Blasius,
         ChaoticDynamicalSystemLibrary.BlinkingRotlet,
+        ChaoticDynamicalSystemLibrary.BlinkingVortex,
+        ChaoticDynamicalSystemLibrary.Bouali,
         ChaoticDynamicalSystemLibrary.Bouali2,
         ChaoticDynamicalSystemLibrary.BurkeShaw,
         ChaoticDynamicalSystemLibrary.CaTwoPlus,
+        ChaoticDynamicalSystemLibrary.CaTwoPlusQuasiperiodic,
         ChaoticDynamicalSystemLibrary.CellCycle,
         ChaoticDynamicalSystemLibrary.CellularNeuralNetwork,
         ChaoticDynamicalSystemLibrary.Chen,
@@ -27,6 +30,7 @@ using SafeTestsets
         ChaoticDynamicalSystemLibrary.CircadianRhythm,
         ChaoticDynamicalSystemLibrary.CoevolvingPredatorPrey,
         ChaoticDynamicalSystemLibrary.Colpitts,
+        ChaoticDynamicalSystemLibrary.Coullet,
         ChaoticDynamicalSystemLibrary.Dadras,
         ChaoticDynamicalSystemLibrary.DequanLi,
         ChaoticDynamicalSystemLibrary.DoubleGyre,
@@ -70,6 +74,7 @@ using SafeTestsets
         ChaoticDynamicalSystemLibrary.LorenzBounded,
         ChaoticDynamicalSystemLibrary.LorenzCoupled,
         ChaoticDynamicalSystemLibrary.LorenzStenflo,
+        ChaoticDynamicalSystemLibrary.LiuChen,
         ChaoticDynamicalSystemLibrary.LuChen,
         ChaoticDynamicalSystemLibrary.LuChenCheng,
         ChaoticDynamicalSystemLibrary.MacArthur,
@@ -79,6 +84,7 @@ using SafeTestsets
         ChaoticDynamicalSystemLibrary.NoseHoover,
         ChaoticDynamicalSystemLibrary.NuclearQuadrupole,
         ChaoticDynamicalSystemLibrary.OscillatingFlow,
+        ChaoticDynamicalSystemLibrary.PanXuZhou,
         ChaoticDynamicalSystemLibrary.PehlivanWei,
         ChaoticDynamicalSystemLibrary.Qi,
         ChaoticDynamicalSystemLibrary.QiChen,
@@ -117,6 +123,7 @@ using SafeTestsets
         ChaoticDynamicalSystemLibrary.SwingingAtwood,
         ChaoticDynamicalSystemLibrary.Thomas,
         ChaoticDynamicalSystemLibrary.Torus,
+        ChaoticDynamicalSystemLibrary.Tsucs2,
         ChaoticDynamicalSystemLibrary.TurchinHanski,
         ChaoticDynamicalSystemLibrary.VallisElNino,
         ChaoticDynamicalSystemLibrary.WangSun,
@@ -124,6 +131,9 @@ using SafeTestsets
         ChaoticDynamicalSystemLibrary.YuWang,
         ChaoticDynamicalSystemLibrary.YuWang2,
         ChaoticDynamicalSystemLibrary.ZhouChen)
+        @test ChaoticDynamicalSystemLibrary.originalcode(System) isa String
+        @test_nowarn ChaoticDynamicalSystemLibrary.make_docstring(System)
+
         prob = @test_nowarn System()
         @test prob isa ODEProblem
         @test_nowarn solve(prob, Tsit5(), abstol = 1e-6, reltol = 1e-4)

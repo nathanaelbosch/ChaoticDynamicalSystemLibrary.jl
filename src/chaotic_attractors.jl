@@ -755,8 +755,23 @@ function LidDrivenCavityFlow()
     return prob
 end
 
-# class BlinkingVortex(BlinkingRotlet):
-#     pass
+function BlinkingVortex end
+function originalcode(::typeof(BlinkingVortex))
+    """
+class BlinkingVortex(BlinkingRotlet):
+    pass
+"""
+end
+@doc make_docstring(BlinkingVortex) BlinkingVortex
+function BlinkingVortex()
+    prob = BlinkingRotlet()
+    u0 = Float64.(ATTRACTOR_DATA["BlinkingVortex"]["initial_conditions"])
+    p = format_parameters(ATTRACTOR_DATA["BlinkingVortex"]["parameters"])
+    T = ATTRACTOR_DATA["BlinkingVortex"]["period"] * N
+    tspan = (0.0, T)
+    prob = remake(prob, u0 = u0, p = p, tspan = tspan)
+    return prob
+end
 
 # class InteriorSquirmer(DynSys):
 
@@ -2050,8 +2065,23 @@ function Arneodo()
     return prob
 end
 
-# class Coullet(Arneodo):
-#     pass
+function Coullet end
+function originalcode(::typeof(Coullet))
+    """
+class Coullet(Arneodo):
+    pass
+"""
+end
+@doc make_docstring(Coullet) Coullet
+function Coullet()
+    prob = Arneodo()
+    u0 = Float64.(ATTRACTOR_DATA["Coullet"]["initial_conditions"])
+    p = format_parameters(ATTRACTOR_DATA["Coullet"]["parameters"])
+    T = ATTRACTOR_DATA["Coullet"]["period"] * N
+    tspan = (0.0, T)
+    prob = remake(prob, u0 = u0, p = p, tspan = tspan)
+    return prob
+end
 
 function Rucklidge end
 originalcode(::typeof(Rucklidge)) = """
@@ -2109,8 +2139,23 @@ function Sakarya()
     return prob
 end
 
-# class LiuChen(Sakarya):
-#     pass
+function LiuChen end
+function originalcode(::typeof(LiuChen))
+    """
+class LiuChen(Sakarya):
+    pass
+"""
+end
+@doc make_docstring(LiuChen) LiuChen
+function LiuChen()
+    prob = Sakarya()
+    u0 = Float64.(ATTRACTOR_DATA["LiuChen"]["initial_conditions"])
+    p = format_parameters(ATTRACTOR_DATA["LiuChen"]["parameters"])
+    T = ATTRACTOR_DATA["LiuChen"]["period"] * N
+    tspan = (0.0, T)
+    prob = remake(prob, u0 = u0, p = p, tspan = tspan)
+    return prob
+end
 
 function RayleighBenard end
 originalcode(::typeof(RayleighBenard)) = """
@@ -2196,8 +2241,23 @@ function Bouali2()
     return prob
 end
 
-# class Bouali(Bouali2):
-#     pass
+function Bouali end
+function originalcode(::typeof(Bouali))
+    """
+class Bouali(Bouali2):
+    pass
+"""
+end
+@doc make_docstring(Bouali) Bouali
+function Bouali()
+    prob = Bouali2()
+    u0 = Float64.(ATTRACTOR_DATA["Bouali"]["initial_conditions"])
+    p = format_parameters(ATTRACTOR_DATA["Bouali"]["parameters"])
+    T = ATTRACTOR_DATA["Bouali"]["period"] * N
+    tspan = (0.0, T)
+    prob = remake(prob, u0 = u0, p = p, tspan = tspan)
+    return prob
+end
 
 function LuChenCheng end
 originalcode(::typeof(LuChenCheng)) = """
@@ -2535,11 +2595,41 @@ function DequanLi()
     return prob
 end
 
-# class PanXuZhou(DequanLi):
-#     pass
+function PanXuZhou end
+function originalcode(::typeof(PanXuZhou))
+    """
+class PanXuZhou(DequanLi):
+    pass
+"""
+end
+@doc make_docstring(PanXuZhou) PanXuZhou
+function PanXuZhou()
+    prob = DequanLi()
+    u0 = Float64.(ATTRACTOR_DATA["PanXuZhou"]["initial_conditions"])
+    p = format_parameters(ATTRACTOR_DATA["PanXuZhou"]["parameters"])
+    T = ATTRACTOR_DATA["PanXuZhou"]["period"] * N
+    tspan = (0.0, T)
+    prob = remake(prob, u0 = u0, p = p, tspan = tspan)
+    return prob
+end
 
-# class Tsucs2(DequanLi):
-#     pass
+function Tsucs2 end
+function originalcode(::typeof(Tsucs2))
+    """
+class Tsucs2(DequanLi):
+    pass
+"""
+end
+@doc make_docstring(Tsucs2) Tsucs2
+function Tsucs2()
+    prob = DequanLi()
+    u0 = Float64.(ATTRACTOR_DATA["Tsucs2"]["initial_conditions"])
+    p = format_parameters(ATTRACTOR_DATA["Tsucs2"]["parameters"])
+    T = ATTRACTOR_DATA["Tsucs2"]["period"] * N
+    tspan = (0.0, T)
+    prob = remake(prob, u0 = u0, p = p, tspan = tspan)
+    return prob
+end
 
 function ArnoldWeb end
 originalcode(::typeof(ArnoldWeb)) = """
@@ -3874,8 +3964,23 @@ function Torus()
     return prob
 end
 
-# class CaTwoPlusQuasiperiodic(CaTwoPlus):
-#     pass
+function CaTwoPlusQuasiperiodic end
+function originalcode(::typeof(CaTwoPlusQuasiperiodic))
+    """
+class CaTwoPlusQuasiperiodic(CaTwoPlus):
+    pass
+"""
+end
+@doc make_docstring(CaTwoPlusQuasiperiodic) CaTwoPlusQuasiperiodic
+function CaTwoPlusQuasiperiodic()
+    prob = CaTwoPlus()
+    u0 = Float64.(ATTRACTOR_DATA["CaTwoPlusQuasiperiodic"]["initial_conditions"])
+    p = format_parameters(ATTRACTOR_DATA["CaTwoPlusQuasiperiodic"]["parameters"])
+    T = ATTRACTOR_DATA["CaTwoPlusQuasiperiodic"]["period"] * N
+    tspan = (0.0, T)
+    prob = remake(prob, u0 = u0, p = p, tspan = tspan)
+    return prob
+end
 
 function Hopfield end
 originalcode(::typeof(Hopfield)) = """
