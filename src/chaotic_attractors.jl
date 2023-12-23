@@ -3925,7 +3925,7 @@ function MacArthur()
     function growth_rate(rr, k, r)
         u0 = rr ./ (k .+ rr)
         u = r .* u0'
-        return minimum(u, dims = 2)
+        return reshape(minimum(u, dims = 2), 5)
     end
     function rhs(du, u, p, t)
         @views nn, rr = u[1:5], u[6:10]
