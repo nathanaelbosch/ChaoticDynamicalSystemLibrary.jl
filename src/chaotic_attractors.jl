@@ -39,14 +39,14 @@ function Lorenz()
     u0 = Float64.(ATTRACTOR_DATA["Lorenz"]["initial_conditions"])
     p = dict_to_componentarray(ATTRACTOR_DATA["Lorenz"]["parameters"])
     tspan = (0.0, 1.0)
-    f = ODEFunction(rhs, jac=jac)
+    f = ODEFunction(rhs, jac = jac)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
-
 function LorenzBounded end
-originalcode(::typeof(LorenzBounded)) = """
+function originalcode(::typeof(LorenzBounded))
+    """
 class LorenzBounded(DynSys):
     @staticjit
     def _rhs(x, y, z, t, beta, r, rho, sigma):
@@ -55,14 +55,21 @@ class LorenzBounded(DynSys):
         zdot = x * y - beta * z - 1/r**2 * y * x ** 3 - 1/r**2 * x * y ** 3 - 1/r**2 * x * y * z ** 2 + beta/r**2 * z * x ** 2 + beta/r**2 * z * y ** 2 + beta/r**2 * z ** 3
         return xdot, ydot, zdot
 """
+end
 @doc make_docstring(LorenzBounded)
 function LorenzBounded()
     function rhs(du, u, p, t)
         beta, r, rho, sigma = p
         x, y, z = u
-        du[1] = sigma * y - sigma * x - sigma/r^2 * y * x^2 - sigma/r^2 * y^3 - sigma/r^2 * y * z^2 + sigma/r^2 * x^3 + sigma/r^2 * x * y^2 + sigma/r^2 * x * z^2
-        du[2] = rho * x - x * z - y - rho/r^2 * x^3 - rho/r^2 * x * y^2 - rho/r^2 * x * z^2 + 1/r^2 * z * x^3 + 1/r^2 * x * z * y^2 + 1/r^2 * x * z^3 + 1/r^2 * y * x^2 + 1/r^2 * y^3 + 1/r^2 * y * z^2
-        du[3] = x * y - beta * z - 1/r^2 * y * x^3 - 1/r^2 * x * y^3 - 1/r^2 * x * y * z^2 + beta/r^2 * z * x^2 + beta/r^2 * z * y^2 + beta/r^2 * z^3
+        du[1] = sigma * y - sigma * x - sigma / r^2 * y * x^2 - sigma / r^2 * y^3 -
+                sigma / r^2 * y * z^2 + sigma / r^2 * x^3 + sigma / r^2 * x * y^2 +
+                sigma / r^2 * x * z^2
+        du[2] = rho * x - x * z - y - rho / r^2 * x^3 - rho / r^2 * x * y^2 -
+                rho / r^2 * x * z^2 + 1 / r^2 * z * x^3 + 1 / r^2 * x * z * y^2 +
+                1 / r^2 * x * z^3 + 1 / r^2 * y * x^2 + 1 / r^2 * y^3 + 1 / r^2 * y * z^2
+        du[3] = x * y - beta * z - 1 / r^2 * y * x^3 - 1 / r^2 * x * y^3 -
+                1 / r^2 * x * y * z^2 + beta / r^2 * z * x^2 + beta / r^2 * z * y^2 +
+                beta / r^2 * z^3
     end
     u0 = Float64.(ATTRACTOR_DATA["LorenzBounded"]["initial_conditions"])
     p = dict_to_componentarray(ATTRACTOR_DATA["LorenzBounded"]["parameters"])
@@ -71,7 +78,6 @@ function LorenzBounded()
     prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
-
 
 function LorenzCoupled end
 originalcode(::typeof(LorenzCoupled)) = """
@@ -120,11 +126,11 @@ class Lorenz96(DynSys):
 function Lorenz96()
     function rhs(du, u, p, t)
         f = p[1]
-        du[1] = (u[2] - u[end-1]) * u[end] - u[1] + f
+        du[1] = (u[2] - u[end - 1]) * u[end] - u[1] + f
         du[2] = (u[3] - u[end]) * u[1] - u[2] + f
-        du[end] = (u[1] - u[end-2]) * u[end-1] - u[end] + f
-        @simd ivdep for i in 3:(length(u)-1)
-            du[i] = (u[i+1] - u[i-2]) * u[i-1] - u[i] + f
+        du[end] = (u[1] - u[end - 2]) * u[end - 1] - u[end] + f
+        @simd ivdep for i in 3:(length(u) - 1)
+            du[i] = (u[i + 1] - u[i - 2]) * u[i - 1] - u[i] + f
         end
     end
     u0 = Float64.(ATTRACTOR_DATA["Lorenz96"]["initial_conditions"])
@@ -244,8 +250,10 @@ function DoublePendulum()
         denom = 16 - 9 * cos(u[1] - u[2])^2
         du[1] = pre * (2 * u[3] - 3 * cos(u[1] - u[2]) * u[4]) / denom
         du[2] = pre * (8 * u[4] - 3 * cos(u[1] - u[2]) * u[3]) / denom
-        du[3] = -0.5 * (m * d^2) * (du[1] * du[2] * sin(u[1] - u[2]) + 3 * (g / d) * sin(u[1]))
-        du[4] = -0.5 * (m * d^2) * (-du[1] * du[2] * sin(u[1] - u[2]) + 3 * (g / d) * sin(u[2]))
+        du[3] = -0.5 * (m * d^2) *
+                (du[1] * du[2] * sin(u[1] - u[2]) + 3 * (g / d) * sin(u[1]))
+        du[4] = -0.5 * (m * d^2) *
+                (-du[1] * du[2] * sin(u[1] - u[2]) + 3 * (g / d) * sin(u[2]))
     end
     u0 = Float64.(ATTRACTOR_DATA["DoublePendulum"]["initial_conditions"])
     p = dict_to_componentarray(ATTRACTOR_DATA["DoublePendulum"]["parameters"])
@@ -303,7 +311,8 @@ class GuckenheimerHolmes(DynSys):
 function GuckenheimerHolmes()
     function rhs(du, u, p, t)
         a, b, c, d, e, f = p
-        du[1] = a * u[1] - b * u[2] + c * u[3] * u[1] + d * u[3] * u[1]^2 + d * u[3] * u[2]^2
+        du[1] = a * u[1] - b * u[2] + c * u[3] * u[1] + d * u[3] * u[1]^2 +
+                d * u[3] * u[2]^2
         du[2] = a * u[2] + b * u[1] + c * u[3] * u[2]
         du[3] = e - u[3]^2 - f * u[1]^2 - f * u[2]^2 - a * u[3]^3
     end
@@ -419,7 +428,7 @@ function MultiChua()
     function diode(x, m, c)
         total = m[end] * x
         @simd ivdep for i in 1:5
-            total += 0.5 * (m[i] - m[i+1]) * (abs(x + c[i]) - abs(x - c[i]))
+            total += 0.5 * (m[i] - m[i + 1]) * (abs(x + c[i]) - abs(x - c[i]))
         end
         return total
     end
@@ -485,7 +494,7 @@ function MackeyGlass()
     p = dict_to_componentarray(ATTRACTOR_DATA["MackeyGlass"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = DDEProblem(f, u0, tspan, p, constant_lags=[1.0])
+    prob = DDEProblem(f, u0, tspan, p, constant_lags = [1.0])
     return prob
 end
 
@@ -507,14 +516,12 @@ function IkedaDelay()
     p = dict_to_componentarray(ATTRACTOR_DATA["IkedaDelay"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = DDEProblem(f, u0, tspan, p, constant_lags=[1.0])
+    prob = DDEProblem(f, u0, tspan, p, constant_lags = [1.0])
     return prob
 end
 
-
 # class SprottDelay(IkedaDelay):
 #     pass
-
 
 # class VossDelay(DynSysDelay):
 #     @staticjit
@@ -523,7 +530,6 @@ end
 #         xdot = -alpha * x + f
 #         return xdot
 
-
 # class ScrollDelay(DynSysDelay):
 #     @staticjit
 #     def _rhs(x, xt, t, alpha, beta, tau):
@@ -531,14 +537,12 @@ end
 #         xdot = -alpha * xt + beta * f
 #         return xdot
 
-
 # class PiecewiseCircuit(DynSysDelay):
 #     @staticjit
 #     def _rhs(x, xt, t, alpha, beta, c, tau):
 #         f = -((xt / c) ** 3) + 3 * xt / c
 #         xdot = -alpha * xt + beta * f
 #         return xdot
-
 
 # # ## this was not chaotic
 # # class ENSODelay(DynSysDelay):
@@ -629,10 +633,11 @@ function BlinkingRotlet()
         zeta = b^2 + r^2 - 2 * b * r * cos(theta)
         nu = a^2 + b^2 - (2 * b^2 * r^2) / a^2
         vr = b * sin(theta) * (-bc * (gamma / kappa^2) - 1 / kappa + 1 / zeta)
-        vth = bc * (gamma * iota) / kappa^2 + bc * r * nu / (a^2 * kappa) + iota / kappa - (r - b * cos(theta)) / zeta
+        vth = bc * (gamma * iota) / kappa^2 + bc * r * nu / (a^2 * kappa) + iota / kappa -
+              (r - b * cos(theta)) / zeta
         return vr, vth
     end
-    function protocol(t, tau, stiffness=20)
+    function protocol(t, tau, stiffness = 20)
         return 0.5 + 0.5 * tanh(tau * stiffness * sin(2 * pi * t / tau))
     end
     function rhs(du, u, p, t)
@@ -657,7 +662,8 @@ function BlinkingRotlet()
 end
 
 function LidDrivenCavityFlow end
-originalcode(::typeof(LidDrivenCavityFlow)) = """
+function originalcode(::typeof(LidDrivenCavityFlow))
+    """
 class LidDrivenCavityFlow(DynSys):
     @staticjit
     def _lid(x, y, a, b, tau, u1, u2):
@@ -714,24 +720,31 @@ class LidDrivenCavityFlow(DynSys):
     def _postprocessing(self, x, y, tt):
         return x, y, np.sin(2 * np.pi * tt / self.tau)
 """
+end
 @doc make_docstring(LidDrivenCavityFlow) LidDrivenCavityFlow
 function LidDrivenCavityFlow()
     function lid(x, y, a, b, tau, u1, u2)
         prefactor1 = 2 * u1 * sin(pi * x / a) / (2 * b * pi + a * sinh(2 * pi * b / a))
         prefactor2 = 2 * u2 * sin(2 * pi * x / a) / (4 * b * pi + a * sinh(4 * pi * b / a))
-        vx1 = -b * pi * sinh(pi * b / a) * sinh(pi * y / a) + cosh(pi * b / a) * (pi * y * cosh(pi * y /a) + a * sinh(pi * y / a))
-        vx2 = -2 * b * pi * sinh(2 * pi * b / a) * sinh(2 * pi * y / a) + cosh(2 * pi * b / a) * (2 * pi * y * cosh(2 * pi * y / a) + a * sinh(2 * pi * y / a))
+        vx1 = -b * pi * sinh(pi * b / a) * sinh(pi * y / a) +
+              cosh(pi * b / a) * (pi * y * cosh(pi * y / a) + a * sinh(pi * y / a))
+        vx2 = -2 * b * pi * sinh(2 * pi * b / a) * sinh(2 * pi * y / a) +
+              cosh(2 * pi * b / a) *
+              (2 * pi * y * cosh(2 * pi * y / a) + a * sinh(2 * pi * y / a))
         vx = prefactor1 * vx1 + prefactor2 * vx2
 
         prefactor1 = 2 * pi * u1 * cos(pi * x / a) / (2 * b * pi + a * sinh(2 * pi * b / a))
-        prefactor2 = 4 * pi * u2 * cos(2 * pi * x / a) / (4 * b * pi + a * sinh(4 * pi * b / a))
-        vy1 = b * sinh(pi * b / a) * cosh(pi * y / a) - cosh(pi * b / a) * y * sinh(pi * y / a)
-        vy2 = b * sinh(2 * pi * b / a) * cosh(2 * pi * y / a) - cosh(2 * pi * b / a) * y * sinh(2 * pi * y / a)
+        prefactor2 = 4 * pi * u2 * cos(2 * pi * x / a) /
+                     (4 * b * pi + a * sinh(4 * pi * b / a))
+        vy1 = b * sinh(pi * b / a) * cosh(pi * y / a) -
+              cosh(pi * b / a) * y * sinh(pi * y / a)
+        vy2 = b * sinh(2 * pi * b / a) * cosh(2 * pi * y / a) -
+              cosh(2 * pi * b / a) * y * sinh(2 * pi * y / a)
         vy = prefactor1 * vy1 + prefactor2 * vy2
 
         return vx, vy
     end
-    function protocol(t, tau, stiffness=20)
+    function protocol(t, tau, stiffness = 20)
         return 0.5 + 0.5 * tanh(tau * stiffness * sin(2 * pi * t / tau))
     end
     function rhs(du, u, p, t)
@@ -1074,27 +1087,27 @@ function CoevolvingPredatorPrey()
     function rhs(du, u, p, t)
         x, y, alpha = u
         a1, a2, a3, b1, b2, d1, d2, delta, k1, k2, k4, vv = p
-        du[1] = x * (
-            -((a3 * y) / (1 + b2 * x))
-            + (a1 * alpha * (1 - k1 * x * (-alpha + alpha * delta))) / (1 + b1 * alpha)
-            - d1
-            * (
-                1
-                - k2 * (-alpha^2 + (alpha * delta)^2)
-                + k4 * (-alpha^4 + (alpha * delta)^4)
-            )
-        )
+        du[1] = x * (-((a3 * y) / (1 + b2 * x))
+                 +
+                 (a1 * alpha * (1 - k1 * x * (-alpha + alpha * delta))) / (1 + b1 * alpha)
+                 -
+                 d1
+                 *
+                 (1
+                  -
+                  k2 * (-alpha^2 + (alpha * delta)^2)
+                  +
+                  k4 * (-alpha^4 + (alpha * delta)^4)))
         du[2] = (-d2 + (a2 * x) / (1 + b2 * x)) * y
-        du[3] = vv * (
-            -((a1 * k1 * x * alpha * delta) / (1 + b1 * alpha))
-            - d1 * (-2 * k2 * alpha * delta^2 + 4 * k4 * alpha^3 * delta^4)
-        )
+        du[3] = vv * (-((a1 * k1 * x * alpha * delta) / (1 + b1 * alpha))
+                 -
+                 d1 * (-2 * k2 * alpha * delta^2 + 4 * k4 * alpha^3 * delta^4))
     end
     u0 = Float64.(ATTRACTOR_DATA["CoevolvingPredatorPrey"]["initial_conditions"])
     p = dict_to_componentarray(ATTRACTOR_DATA["CoevolvingPredatorPrey"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true)
     return prob
 end
 
@@ -1121,7 +1134,7 @@ function KawczynskiStrizhak()
     p = dict_to_componentarray(ATTRACTOR_DATA["KawczynskiStrizhak"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true)
     return prob
 end
 
@@ -1183,7 +1196,7 @@ function BelousovZhabotinsky()
     p = dict_to_componentarray(ATTRACTOR_DATA["BelousovZhabotinsky"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true)
     return prob
 end
 
@@ -1210,10 +1223,9 @@ function IsothermalChemical()
     p = dict_to_componentarray(ATTRACTOR_DATA["IsothermalChemical"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true)
     return prob
 end
-
 
 function VallisElNino end
 originalcode(::typeof(VallisElNino)) = """
@@ -1238,7 +1250,7 @@ function VallisElNino()
     p = dict_to_componentarray(ATTRACTOR_DATA["VallisElNino"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true)
     return prob
 end
 
@@ -1259,13 +1271,13 @@ function RabinovichFabrikant()
         a, g = p
         du[1] = y * z - y + y * x^2 + g * x
         du[2] = 3 * x * z + x - x^3 + g * y
-        du[3] = -2 * a * z  - 2 * x * y * z
+        du[3] = -2 * a * z - 2 * x * y * z
     end
     u0 = Float64.(ATTRACTOR_DATA["RabinovichFabrikant"]["initial_conditions"])
     p = dict_to_componentarray(ATTRACTOR_DATA["RabinovichFabrikant"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true)
     return prob
 end
 
@@ -1292,7 +1304,7 @@ function NoseHoover()
     p = dict_to_componentarray(ATTRACTOR_DATA["NoseHoover"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true)
     return prob
 end
 
@@ -1319,7 +1331,7 @@ function Dadras()
     p = dict_to_componentarray(ATTRACTOR_DATA["Dadras"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true)
     return prob
 end
 
@@ -1346,12 +1358,13 @@ function RikitakeDynamo()
     p = dict_to_componentarray(ATTRACTOR_DATA["RikitakeDynamo"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true)
     return prob
 end
 
 function NuclearQuadrupole end
-originalcode(::typeof(NuclearQuadrupole)) = """
+function originalcode(::typeof(NuclearQuadrupole))
+    """
 class NuclearQuadrupole(DynSys):
     @staticjit
     def _rhs(q1, q2, p1, p2, t, a, b, d):
@@ -1361,6 +1374,7 @@ class NuclearQuadrupole(DynSys):
         p2dot = -a * q2 - 3 * np.sqrt(2) * b * q1 * q2 - d * q2 * q1 ** 2 - d * q2 ** 3
         return q1dot, q2dot, p1dot, p2dot
 """
+end
 @doc make_docstring(NuclearQuadrupole) NuclearQuadrupole
 function NuclearQuadrupole()
     function rhs(du, u, p, t)
@@ -1368,14 +1382,15 @@ function NuclearQuadrupole()
         a, b, d = p
         du[1] = a * p1
         du[2] = a * p2
-        du[3] = - a * q1 + 3 / sqrt(2) * b * q1^2 - 3 / sqrt(2) * b * q2^2 - d * q1^3 - d * q1 * q2^2
+        du[3] = -a * q1 + 3 / sqrt(2) * b * q1^2 - 3 / sqrt(2) * b * q2^2 - d * q1^3 -
+                d * q1 * q2^2
         du[4] = -a * q2 - 3 * sqrt(2) * b * q1 * q2 - d * q2 * q1^2 - d * q2^3
     end
     u0 = Float64.(ATTRACTOR_DATA["NuclearQuadrupole"]["initial_conditions"])
     p = dict_to_componentarray(ATTRACTOR_DATA["NuclearQuadrupole"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true)
     return prob
 end
 
@@ -1401,7 +1416,7 @@ function PehlivanWei()
     p = dict_to_componentarray(ATTRACTOR_DATA["PehlivanWei"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true)
     return prob
 end
 
@@ -1427,7 +1442,7 @@ function SprottTorus()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottTorus"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true, sparse = true)
     return prob
 end
 
@@ -1454,10 +1469,9 @@ function SprottJerk()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottJerk"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true, sparse = true)
     return prob
 end
-
 
 # ## Not chaotic
 # # class JerkCircuit(DynSys):
@@ -1490,7 +1504,7 @@ function SprottA()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottA"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true, sparse = true)
     return prob
 end
 
@@ -1516,7 +1530,7 @@ function SprottB()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottB"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true, sparse = true)
     return prob
 end
 
@@ -1542,7 +1556,7 @@ function SprottC()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottC"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, p, jac = true, sparse = true)
     return prob
 end
 
@@ -1755,7 +1769,7 @@ function SprottK()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottK"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -1782,7 +1796,7 @@ function SprottL()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottL"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -1809,7 +1823,7 @@ function SprottM()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottM"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -1835,7 +1849,7 @@ function SprottN()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottN"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -1862,7 +1876,7 @@ function SprottO()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottO"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -1889,7 +1903,7 @@ function SprottP()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottP"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -1916,7 +1930,7 @@ function SprottQ()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottQ"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -1943,7 +1957,7 @@ function SprottR()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottR"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -1969,7 +1983,7 @@ function SprottS()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottS"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -1995,7 +2009,7 @@ function SprottMore()
     p = dict_to_componentarray(ATTRACTOR_DATA["SprottMore"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2022,7 +2036,7 @@ function Arneodo()
     p = dict_to_componentarray(ATTRACTOR_DATA["Arneodo"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2051,7 +2065,7 @@ function Rucklidge()
     p = dict_to_componentarray(ATTRACTOR_DATA["Rucklidge"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2078,7 +2092,7 @@ function Sakarya()
     p = dict_to_componentarray(ATTRACTOR_DATA["Sakarya"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2108,7 +2122,7 @@ function RayleighBenard()
     p = dict_to_componentarray(ATTRACTOR_DATA["RayleighBenard"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2135,7 +2149,7 @@ function Finance()
     p = dict_to_componentarray(ATTRACTOR_DATA["Finance"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,jac=true,sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
 
@@ -2162,10 +2176,9 @@ function Bouali2()
     p = dict_to_componentarray(ATTRACTOR_DATA["Bouali2"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,jac=true,sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
-
 
 # class Bouali(Bouali2):
 #     pass
@@ -2193,7 +2206,7 @@ function LuChenCheng()
     p = dict_to_componentarray(ATTRACTOR_DATA["LuChenCheng"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,jac=true,sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
 
@@ -2220,7 +2233,7 @@ function LuChen()
     p = dict_to_componentarray(ATTRACTOR_DATA["LuChen"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,jac=true,sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
 
@@ -2247,7 +2260,7 @@ function QiChen()
     p = dict_to_componentarray(ATTRACTOR_DATA["QiChen"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,jac=true,sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
 
@@ -2274,7 +2287,7 @@ function ZhouChen()
     p = dict_to_componentarray(ATTRACTOR_DATA["ZhouChen"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
 
@@ -2301,7 +2314,7 @@ function BurkeShaw()
     p = dict_to_componentarray(ATTRACTOR_DATA["BurkeShaw"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
 
@@ -2328,7 +2341,7 @@ function Chen()
     p = dict_to_componentarray(ATTRACTOR_DATA["Chen"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
 
@@ -2355,7 +2368,7 @@ function ChenLee()
     p = dict_to_componentarray(ATTRACTOR_DATA["ChenLee"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
 
@@ -2382,7 +2395,7 @@ function WangSun()
     p = dict_to_componentarray(ATTRACTOR_DATA["WangSun"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
 
@@ -2409,7 +2422,7 @@ function YuWang()
     p = dict_to_componentarray(ATTRACTOR_DATA["YuWang"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
 
@@ -2436,7 +2449,7 @@ function YuWang2()
     p = dict_to_componentarray(ATTRACTOR_DATA["YuWang2"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac=true, sparse=true)
+    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
     return prob
 end
 
@@ -2494,10 +2507,8 @@ function DequanLi()
     return prob
 end
 
-
 # class PanXuZhou(DequanLi):
 #     pass
-
 
 # class Tsucs2(DequanLi):
 #     pass
@@ -2620,7 +2631,7 @@ function HyperLorenz()
     p = dict_to_componentarray(ATTRACTOR_DATA["HyperLorenz"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2649,7 +2660,7 @@ function HyperCai()
     p = dict_to_componentarray(ATTRACTOR_DATA["HyperCai"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2678,7 +2689,7 @@ function HyperBao()
     p = dict_to_componentarray(ATTRACTOR_DATA["HyperBao"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2707,7 +2718,7 @@ function HyperJha()
     p = dict_to_componentarray(ATTRACTOR_DATA["HyperJha"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2736,7 +2747,7 @@ function HyperQi()
     p = dict_to_componentarray(ATTRACTOR_DATA["HyperQi"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2765,7 +2776,7 @@ function Qi()
     p = dict_to_componentarray(ATTRACTOR_DATA["Qi"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2794,7 +2805,7 @@ function LorenzStenflo()
     p = dict_to_componentarray(ATTRACTOR_DATA["LorenzStenflo"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2823,7 +2834,7 @@ function HyperYangChen()
     p = dict_to_componentarray(ATTRACTOR_DATA["HyperYangChen"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2939,7 +2950,7 @@ function HyperPang()
     p = dict_to_componentarray(ATTRACTOR_DATA["HyperPang"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2968,7 +2979,7 @@ function HyperLu()
     p = dict_to_componentarray(ATTRACTOR_DATA["HyperLu"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -2995,7 +3006,7 @@ function SaltonSea()
     p = dict_to_componentarray(ATTRACTOR_DATA["SaltonSea"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan)
+    prob = ODEProblem(f, u0, tspan)
     return prob
 end
 
@@ -3050,7 +3061,8 @@ function ExcitableCell()
 
         ca = c / (1 + c)
 
-        du[1] = gi * minf^3 * hinf * (vi - v) + gkv * n^4 * (vk - v) + gkc * ca * (vk - v) + gl * (vl - v)
+        du[1] = gi * minf^3 * hinf * (vi - v) + gkv * n^4 * (vk - v) + gkc * ca * (vk - v) +
+                gl * (vl - v)
         du[2] = (ninf - n) / tau
         du[3] = rho * (minf^3 * hinf * (vc - v) - kc * c)
     end
@@ -3058,7 +3070,7 @@ function ExcitableCell()
     p = dict_to_componentarray(ATTRACTOR_DATA["ExcitableCell"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,p)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3101,7 +3113,7 @@ function CaTwoPlus()
     p = dict_to_componentarray(ATTRACTOR_DATA["CaTwoPlus"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,p)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3154,7 +3166,7 @@ function CellCycle()
     p = dict_to_componentarray(ATTRACTOR_DATA["CellCycle"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,p)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3213,7 +3225,7 @@ function CircadianRhythm()
     p = dict_to_componentarray(ATTRACTOR_DATA["CircadianRhythm"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,p)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3244,12 +3256,13 @@ function FluidTrampoline()
     p = dict_to_componentarray(ATTRACTOR_DATA["FluidTrampoline"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,p)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
 function Aizawa end
-originalcode(::typeof(Aizawa)) = """
+function originalcode(::typeof(Aizawa))
+    """
 class Aizawa(DynSys):
     @staticjit
     def _rhs(x, y, z, t, a, b, c, d, e, f):
@@ -3258,6 +3271,7 @@ class Aizawa(DynSys):
         zdot = c + a * z - 0.333333333333333333 * z ** 3 - x ** 2 - y ** 2 - e * z * x ** 2 - e * z * y ** 2 + f * z * x ** 3
         return xdot, ydot, zdot
 """
+end
 @doc make_docstring(Aizawa) Aizawa
 function Aizawa()
     function rhs(du, u, p, t)
@@ -3265,13 +3279,14 @@ function Aizawa()
         a, b, c, d, e, f = p
         du[1] = x * z - b * x - d * y
         du[2] = d * x + y * z - b * y
-        du[3] = c + a * z - 1/3 * z^3 - x^2 - y^2 - e * z * x^2 - e * z * y^2 + f * z * x^3
+        du[3] = c + a * z - 1 / 3 * z^3 - x^2 - y^2 - e * z * x^2 - e * z * y^2 +
+                f * z * x^3
     end
     u0 = Float64.(ATTRACTOR_DATA["Aizawa"]["initial_conditions"])
     p = dict_to_componentarray(ATTRACTOR_DATA["Aizawa"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,p)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3611,7 +3626,8 @@ function TurchinHanski()
     function rhs(du, u, p, t)
         n, p, z = u
         a, d, e, g, h, r, s = p
-        du[1] = r * (1 - e * sin(z)) * n - r * n^2 - g * n^2 / (n^2 + h^2) - a * n * p / (n + d)
+        du[1] = r * (1 - e * sin(z)) * n - r * n^2 - g * n^2 / (n^2 + h^2) -
+                a * n * p / (n + d)
         du[2] = s * (1 - e * sin(z)) * p - s * p^2 / n
         du[3] = 2 * pi
     end
@@ -3655,7 +3671,7 @@ function StickSlipOscillator()
     p = dict_to_componentarray(ATTRACTOR_DATA["StickSlipOscillator"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p,)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3682,7 +3698,7 @@ function HastingsPowell()
     p = dict_to_componentarray(ATTRACTOR_DATA["HastingsPowell"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p,)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3713,7 +3729,7 @@ function CellularNeuralNetwork()
     p = dict_to_componentarray(ATTRACTOR_DATA["CellularNeuralNetwork"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p,)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3741,7 +3757,7 @@ function BeerRNN()
     p = dict_to_componentarray(ATTRACTOR_DATA["BeerRNN"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p,)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3771,10 +3787,9 @@ function Torus()
     p = dict_to_componentarray(ATTRACTOR_DATA["Torus"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,p)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
-
 
 # class CaTwoPlusQuasiperiodic(CaTwoPlus):
 #     pass
@@ -3799,7 +3814,7 @@ function Hopfield()
     p = dict_to_componentarray(ATTRACTOR_DATA["Hopfield"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,p)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3832,7 +3847,7 @@ function MacArthur()
     p = dict_to_componentarray(ATTRACTOR_DATA["MacArthur"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,p)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3859,10 +3874,9 @@ function ItikBanksTumor()
     p = dict_to_componentarray(ATTRACTOR_DATA["ItikBanksTumor"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f,u0,tspan,p)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
-
 
 # ## Doesn't match described dynamics
 # # class CosmologyFriedmann(DynSys):
@@ -3872,7 +3886,6 @@ end
 # #         ydot = -a * y**2 / x - b * x - c * x**3 + d * p * x
 # #         zdot = 3 * (y / x) * (p + z)
 # #         return xdot, ydot, zdot
-
 
 # ## Doesn't match described dynamics
 # # class MixMasterUniverse(DynSys):
@@ -4025,7 +4038,6 @@ end
 # #         thdot = 2*np.pi
 # #         return (sdot, edot, idot, thdot)
 
-
 # # class SeasonalSIR:
 # #     """
 # #     Seasonally forced SEIR model
@@ -4044,7 +4056,6 @@ end
 # #         idot =  b*s*i - (self.mu + self.g)*i
 # #         thdot = 2*np.pi
 # #         return (sdot, idot, thdot)
-
 
 # # class Robinson:
 # #     """
@@ -4069,7 +4080,6 @@ end
 # # Sato: Cardiac model analogous to HH
 # # https://www.sciencedirect.com/science/article/pii/S1007570416300016
 # # hundreds of equations
-
 
 # # class HodgkinHuxley:
 # #     def __init__(self, i=7.92197):
