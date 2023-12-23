@@ -5,7 +5,6 @@ using LinearAlgebra
 using SciMLBase
 using ComponentArrays
 
-
 function dict_with_string_keys_to_symbol_keys(d::Dict)
     new_d = Dict()
     for (k, v) in d
@@ -17,7 +16,6 @@ end
 function dict_to_componentarray(d::Dict)
     return ComponentArray(dict_with_string_keys_to_symbol_keys(d))
 end
-
 
 function make_docstring(f)
     data = ATTRACTOR_DATA[string(f)]
