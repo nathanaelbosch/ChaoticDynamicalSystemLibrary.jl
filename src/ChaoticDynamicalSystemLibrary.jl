@@ -1,20 +1,30 @@
 module ChaoticDynamicalSystemLibrary
 
+using Base: nothing_sentinel
 using JSON, Markdown
 using LinearAlgebra
 using SciMLBase
 using ComponentArrays
+using SimpleUnPack
 
-function dict_with_string_keys_to_symbol_keys(d::Dict)
-    new_d = Dict()
-    for (k, v) in d
-        new_d[Symbol(k)] = v
+vecvec2mat(vv) = hcat(vv...)' # transpose is because of the way the data is stored in the JSON file
+
+function format_parameters(params::Dict)
+    if isempty(params)
+        return nothing
     end
-    return new_d
-end
 
-function dict_to_componentarray(d::Dict)
-    return ComponentArray(dict_with_string_keys_to_symbol_keys(d))
+    intermediate_dict = Dict()
+    for (k, v) in params
+        val = if (v isa Vector) && (v[1] isa Vector)
+            vecvec2mat(v)
+        else
+            v
+        end
+        intermediate_dict[Symbol(k)] = val
+    end
+
+    return ComponentArray(intermediate_dict)
 end
 
 function make_docstring(f)
