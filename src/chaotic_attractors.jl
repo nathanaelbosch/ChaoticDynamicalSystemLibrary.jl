@@ -2074,7 +2074,7 @@ class Coullet(Arneodo):
 end
 @doc make_docstring(Coullet) Coullet
 function Coullet()
-    prob = Arnedo()
+    prob = Arneodo()
     u0 = Float64.(ATTRACTOR_DATA["Coullet"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Coullet"]["parameters"])
     T = ATTRACTOR_DATA["Coullet"]["period"] * N
