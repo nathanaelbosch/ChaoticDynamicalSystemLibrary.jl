@@ -124,7 +124,6 @@ using SafeTestsets
         ChaoticDynamicalSystemLibrary.YuWang,
         ChaoticDynamicalSystemLibrary.YuWang2,
         ChaoticDynamicalSystemLibrary.ZhouChen)
-
         @test ChaoticDynamicalSystemLibrary.originalcode(System) isa String
         @test_nowarn ChaoticDynamicalSystemLibrary.make_docstring(System)
 
