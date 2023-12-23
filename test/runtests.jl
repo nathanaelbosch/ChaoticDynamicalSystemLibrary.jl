@@ -12,7 +12,9 @@ using Aqua, JET
         )
     end
 
-    @testset "Code linting (JET.jl)" begin
-        JET.test_package(ChaoticDynamicalSystemLibrary; target_defined_modules = true)
+    if VERSION >= v"1.7"
+        @testset "Code linting (JET.jl)" begin
+            JET.test_package(ChaoticDynamicalSystemLibrary; target_defined_modules = true)
+        end
     end
 end
