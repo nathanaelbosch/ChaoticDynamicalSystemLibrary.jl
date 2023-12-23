@@ -124,6 +124,10 @@ using SafeTestsets
         ChaoticDynamicalSystemLibrary.YuWang,
         ChaoticDynamicalSystemLibrary.YuWang2,
         ChaoticDynamicalSystemLibrary.ZhouChen)
+
+        @test ChaoticDynamicalSystemLibrary.originalcode(System) isa String
+        @test_nowarn ChaoticDynamicalSystemLibrary.make_docstring(System)
+
         prob = @test_nowarn System()
         @test prob isa ODEProblem
         @test_nowarn solve(prob, Tsit5(), abstol = 1e-6, reltol = 1e-4)
