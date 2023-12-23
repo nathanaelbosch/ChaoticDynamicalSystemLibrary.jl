@@ -16,16 +16,16 @@ class Lorenz(DynSys):
         row3 = [y, x, -beta]
         return [row1, row2, row3]
 """
-@doc make_docstring(Lorenz)
+@doc make_docstring(Lorenz) Lorenz
 function Lorenz()
     function rhs(du, u, p, t)
-        beta, rho, sigma = p
+        @unpack beta, rho, sigma = p
         du[1] = sigma * (u[2] - u[1])
         du[2] = u[1] * (rho - u[3]) - u[2]
         du[3] = u[1] * u[2] - beta * u[3]
     end
     function jac(J, u, p, t)
-        beta, rho, sigma = p
+        @unpack beta, rho, sigma = p
         J[1, 1] = -sigma
         J[1, 2] = sigma
         J[1, 3] = 0
@@ -37,7 +37,7 @@ function Lorenz()
         J[3, 3] = -beta
     end
     u0 = Float64.(ATTRACTOR_DATA["Lorenz"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Lorenz"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Lorenz"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs, jac = jac)
     prob = ODEProblem(f, u0, tspan, p)
@@ -56,10 +56,10 @@ class LorenzBounded(DynSys):
         return xdot, ydot, zdot
 """
 end
-@doc make_docstring(LorenzBounded)
+@doc make_docstring(LorenzBounded) LorenzBounded
 function LorenzBounded()
     function rhs(du, u, p, t)
-        beta, r, rho, sigma = p
+        @unpack beta, r, rho, sigma = p
         x, y, z = u
         du[1] = sigma * y - sigma * x - sigma / r^2 * y * x^2 - sigma / r^2 * y^3 -
                 sigma / r^2 * y * z^2 + sigma / r^2 * x^3 + sigma / r^2 * x * y^2 +
@@ -72,7 +72,7 @@ function LorenzBounded()
                 beta / r^2 * z^3
     end
     u0 = Float64.(ATTRACTOR_DATA["LorenzBounded"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["LorenzBounded"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["LorenzBounded"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -92,10 +92,10 @@ class LorenzCoupled(DynSys):
         z2dot = x2 * y2 - beta * z2
         return x1dot, y1dot, z1dot, x2dot, y2dot, z2dot
 """
-@doc make_docstring(LorenzCoupled)
+@doc make_docstring(LorenzCoupled) LorenzCoupled
 function LorenzCoupled()
     function rhs(du, u, p, t)
-        beta, eps, rho, rho1, rho2, sigma = p
+        @unpack beta, eps, rho, rho1, rho2, sigma = p
         du[1] = sigma * (u[2] - u[1])
         du[2] = rho1 * u[1] - u[1] * u[3] - u[2]
         du[3] = u[1] * u[2] - beta * u[3]
@@ -104,7 +104,7 @@ function LorenzCoupled()
         du[6] = u[4] * u[5] - beta * u[6]
     end
     u0 = Float64.(ATTRACTOR_DATA["LorenzCoupled"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["LorenzCoupled"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["LorenzCoupled"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -134,7 +134,7 @@ function Lorenz96()
         end
     end
     u0 = Float64.(ATTRACTOR_DATA["Lorenz96"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Lorenz96"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Lorenz96"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -154,13 +154,13 @@ class Lorenz84(DynSys):
 @doc make_docstring(Lorenz84) Lorenz84
 function Lorenz84()
     function rhs(du, u, p, t)
-        a, b, f, g = p
+        @unpack a, b, f, g = p
         du[1] = -a * u[1] - u[2]^2 - u[3]^2 + a * f
         du[2] = -u[2] + u[1] * u[2] - b * u[1] * u[3] + g
         du[3] = -u[3] + b * u[1] * u[2] + u[1] * u[3]
     end
     u0 = Float64.(ATTRACTOR_DATA["Lorenz84"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Lorenz84"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Lorenz84"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -180,13 +180,13 @@ class Rossler(DynSys):
 @doc make_docstring(Rossler) Rossler
 function Rossler()
     function rhs(du, u, p, t)
-        a, b, c = p
+        @unpack a, b, c = p
         du[1] = -u[2] - u[3]
         du[2] = u[1] + a * u[2]
         du[3] = b + u[3] * u[1] - c * u[3]
     end
     u0 = Float64.(ATTRACTOR_DATA["Rossler"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Rossler"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Rossler"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -206,13 +206,13 @@ class Thomas(DynSys):
 @doc make_docstring(Thomas) Thomas
 function Thomas()
     function rhs(du, u, p, t)
-        a, b = p
+        @unpack a, b = p
         du[1] = -a * u[1] + b * sin(u[2])
         du[2] = -a * u[2] + b * sin(u[3])
         du[3] = -a * u[3] + b * sin(u[1])
     end
     u0 = Float64.(ATTRACTOR_DATA["Thomas"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Thomas"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Thomas"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -244,7 +244,7 @@ class DoublePendulum(DynSys):
 @doc make_docstring(DoublePendulum) DoublePendulum
 function DoublePendulum()
     function rhs(du, u, p, t)
-        d, m = p
+        @unpack d, m = p
         g = 9.82
         pre = 6 / (m * d^2)
         denom = 16 - 9 * cos(u[1] - u[2])^2
@@ -256,7 +256,7 @@ function DoublePendulum()
                 (-du[1] * du[2] * sin(u[1] - u[2]) + 3 * (g / d) * sin(u[2]))
     end
     u0 = Float64.(ATTRACTOR_DATA["DoublePendulum"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["DoublePendulum"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["DoublePendulum"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -282,7 +282,7 @@ class SwingingAtwood(DynSys):
 @doc make_docstring(SwingingAtwood) SwingingAtwood
 function SwingingAtwood()
     function rhs(du, u, p, t)
-        m1, m2 = p
+        @unpack m1, m2 = p
         g = 9.82
         du[1] = u[3] / (m1 + m2)
         du[2] = u[4] / (m1 * u[1]^2)
@@ -290,7 +290,7 @@ function SwingingAtwood()
         du[4] = -m1 * g * u[1] * sin(u[2])
     end
     u0 = Float64.(ATTRACTOR_DATA["SwingingAtwood"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SwingingAtwood"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SwingingAtwood"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -310,14 +310,14 @@ class GuckenheimerHolmes(DynSys):
 @doc make_docstring(GuckenheimerHolmes) GuckenheimerHolmes
 function GuckenheimerHolmes()
     function rhs(du, u, p, t)
-        a, b, c, d, e, f = p
+        @unpack a, b, c, d, e, f = p
         du[1] = a * u[1] - b * u[2] + c * u[3] * u[1] + d * u[3] * u[1]^2 +
                 d * u[3] * u[2]^2
         du[2] = a * u[2] + b * u[1] + c * u[3] * u[2]
         du[3] = e - u[3]^2 - f * u[1]^2 - f * u[2]^2 - a * u[3]^3
     end
     u0 = Float64.(ATTRACTOR_DATA["GuckenheimerHolmes"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["GuckenheimerHolmes"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["GuckenheimerHolmes"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -345,7 +345,7 @@ function HenonHeiles()
         du[4] = -u[2] - lam * u[1]^2 + lam * u[2]^2
     end
     u0 = Float64.(ATTRACTOR_DATA["HenonHeiles"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HenonHeiles"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HenonHeiles"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -365,13 +365,13 @@ class Halvorsen(DynSys):
 @doc make_docstring(Halvorsen) Halvorsen
 function Halvorsen()
     function rhs(du, u, p, t)
-        a, b = p
+        @unpack a, b = p
         du[1] = -a * u[1] - b * u[2] - b * u[3] - u[2]^2
         du[2] = -a * u[2] - b * u[3] - b * u[1] - u[3]^2
         du[3] = -a * u[3] - b * u[1] - b * u[2] - u[1]^2
     end
     u0 = Float64.(ATTRACTOR_DATA["Halvorsen"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Halvorsen"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Halvorsen"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -392,14 +392,14 @@ class Chua(DynSys):
 @doc make_docstring(Chua) Chua
 function Chua()
     function rhs(du, u, p, t)
-        alpha, beta, m0, m1 = p
+        @unpack alpha, beta, m0, m1 = p
         ramp_x = m1 * u[1] + 0.5 * (m0 - m1) * (abs(u[1] + 1) - abs(u[1] - 1))
         du[1] = alpha * (u[2] - u[1] - ramp_x)
         du[2] = u[1] - u[2] + u[3]
         du[3] = -beta * u[2]
     end
     u0 = Float64.(ATTRACTOR_DATA["Chua"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Chua"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Chua"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -433,13 +433,13 @@ function MultiChua()
         return total
     end
     function rhs(du, u, p, t)
-        a, b, m, c = p
+        @unpack a, b, m, c = p
         du[1] = a * (u[2] - diode(u[1], m, c))
         du[2] = u[1] - u[2] + u[3]
         du[3] = -b * u[2]
     end
     u0 = Float64.(ATTRACTOR_DATA["MultiChua"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["MultiChua"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["MultiChua"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -463,62 +463,30 @@ class Duffing(DynSys):
 @doc make_docstring(Duffing) Duffing
 function Duffing()
     function rhs(du, u, p, t)
-        alpha, beta, delta, gamma, omega = p
+        @unpack alpha, beta, delta, gamma, omega = p
         du[1] = u[2]
         du[2] = -delta * u[2] - beta * u[1] - alpha * u[1]^3 + gamma * cos(u[3])
         du[3] = omega
     end
     u0 = Float64.(ATTRACTOR_DATA["Duffing"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Duffing"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Duffing"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
-function MackeyGlass end
-originalcode(::typeof(MackeyGlass)) = """
-class MackeyGlass(DynSysDelay):
-    @staticjit
-    def _rhs(x, xt, t, beta, gamma, n, tau):
-        xdot = beta * (xt / (1 + xt ** n)) - gamma * x
-        return xdot
-"""
-@doc make_docstring(MackeyGlass) MackeyGlass
-function MackeyGlass()
-    function rhs(du, u, p, t)
-        beta, gamma, n = p
-        du[1] = beta * (u[2] / (1 + u[2]^n)) - gamma * u[1]
-    end
-    u0 = Float64.(ATTRACTOR_DATA["MackeyGlass"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["MackeyGlass"]["parameters"])
-    tspan = (0.0, 1.0)
-    f = ODEFunction(rhs)
-    prob = DDEProblem(f, u0, tspan, p, constant_lags = [1.0])
-    return prob
-end
+# class MackeyGlass(DynSysDelay):
+#     @staticjit
+#     def _rhs(x, xt, t, beta, gamma, n, tau):
+#         xdot = beta * (xt / (1 + xt ** n)) - gamma * x
+#         return xdot
 
-function IkedaDelay end
-originalcode(::typeof(IkedaDelay)) = """
-class IkedaDelay(DynSysDelay):
-    @staticjit
-    def _rhs(x, xt, t, c, mu, tau, x0):
-        xdot = mu * np.sin(xt - x0) - c * x
-        return xdot
-"""
-@doc make_docstring(IkedaDelay) IkedaDelay
-function IkedaDelay()
-    function rhs(du, u, p, t)
-        c, mu, x0 = p
-        du[1] = mu * sin(u[2] - x0) - c * u[1]
-    end
-    u0 = Float64.(ATTRACTOR_DATA["IkedaDelay"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["IkedaDelay"]["parameters"])
-    tspan = (0.0, 1.0)
-    f = ODEFunction(rhs)
-    prob = DDEProblem(f, u0, tspan, p, constant_lags = [1.0])
-    return prob
-end
+# class IkedaDelay(DynSysDelay):
+#     @staticjit
+#     def _rhs(x, xt, t, c, mu, tau, x0):
+#         xdot = mu * np.sin(xt - x0) - c * x
+#         return xdot
 
 # class SprottDelay(IkedaDelay):
 #     pass
@@ -571,7 +539,7 @@ class DoubleGyre(DynSys):
 @doc make_docstring(DoubleGyre) DoubleGyre
 function DoubleGyre()
     function rhs(du, u, p, t)
-        alpha, eps, omega = p
+        @unpack alpha, eps, omega = p
         a = eps * sin(u[3])
         b = 1 - 2 * eps * sin(u[3])
         f = a * u[1]^2 + b * u[1]
@@ -580,7 +548,7 @@ function DoubleGyre()
         du[3] = omega
     end
     u0 = Float64.(ATTRACTOR_DATA["DoubleGyre"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["DoubleGyre"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["DoubleGyre"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -641,7 +609,7 @@ function BlinkingRotlet()
         return 0.5 + 0.5 * tanh(tau * stiffness * sin(2 * pi * t / tau))
     end
     function rhs(du, u, p, t)
-        a, b, bc, tau, sigma = p
+        @unpack a, b, bc, tau, sigma = p
         r, theta, tt = u
         weight = protocol(tt, tau)
         dr1, dth1 = rotlet(r, theta, a, b, bc)
@@ -654,7 +622,7 @@ function BlinkingRotlet()
         du[3] = dtt
     end
     u0 = Float64.(ATTRACTOR_DATA["BlinkingRotlet"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["BlinkingRotlet"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["BlinkingRotlet"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -748,7 +716,7 @@ function LidDrivenCavityFlow()
         return 0.5 + 0.5 * tanh(tau * stiffness * sin(2 * pi * t / tau))
     end
     function rhs(du, u, p, t)
-        a, b, tau, u1, u2 = p
+        @unpack a, b, tau, u1, u2 = p
         x, y, tt = u
         weight = protocol(tt, tau)
         dx1, dy1 = lid(x, y, a, b, tau, u1, u2)
@@ -761,7 +729,7 @@ function LidDrivenCavityFlow()
         du[3] = dtt
     end
     u0 = Float64.(ATTRACTOR_DATA["LidDrivenCavityFlow"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["LidDrivenCavityFlow"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["LidDrivenCavityFlow"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -864,14 +832,14 @@ class OscillatingFlow(DynSys):
 function OscillatingFlow()
     function rhs(du, u, p, t)
         x, y, z = u
-        b, k, omega, u = p
+        @unpack b, k, omega, u = p
         f = x + b * sin(z)
         du[1] = u * cos(k * y) * sin(k * f)
         du[2] = -u * sin(k * y) * cos(k * f)
         du[3] = omega
     end
     u0 = Float64.(ATTRACTOR_DATA["OscillatingFlow"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["OscillatingFlow"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["OscillatingFlow"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -900,15 +868,15 @@ class BickleyJet(DynSys):
 function BickleyJet()
     function rhs(du, u, p, t)
         y, x, z = u
-        ell, eps, k, omega, sigma, u = p
+        @unpack ell, eps, k, omega, sigma, u = p
         sechy = 1 / cosh(y / ell)
-        un = k .* (x - z .* sigma)
+        un = @. k * (x - z * sigma)
         du[1] = u * sechy^2 * (-1 - 2 * dot(cos.(un), eps) * tanh(y / ell))
         du[2] = ell * u * sechy^2 * dot(eps .* k, sin.(un))
         du[3] = omega
     end
     u0 = Float64.(ATTRACTOR_DATA["BickleyJet"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["BickleyJet"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["BickleyJet"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -933,13 +901,13 @@ class ArnoldBeltramiChildress(DynSys):
 function ArnoldBeltramiChildress()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c = p
+        @unpack a, b, c = p
         du[1] = a * sin(z) + c * cos(y)
         du[2] = b * sin(x) + a * cos(z)
         du[3] = c * sin(y) + b * cos(x)
     end
     u0 = Float64.(ATTRACTOR_DATA["ArnoldBeltramiChildress"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["ArnoldBeltramiChildress"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["ArnoldBeltramiChildress"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -960,13 +928,13 @@ class JerkCircuit(DynSys):
 function JerkCircuit()
     function rhs(du, u, p, t)
         x, y, z = u
-        eps, y0 = p
+        @unpack eps, y0 = p
         du[1] = y
         du[2] = z
         du[3] = -z - x - eps * (exp(y / y0) - 1)
     end
     u0 = Float64.(ATTRACTOR_DATA["JerkCircuit"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["JerkCircuit"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["JerkCircuit"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -991,13 +959,13 @@ class ForcedBrusselator(DynSys):
 function ForcedBrusselator()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, f, w = p
+        @unpack a, b, f, w = p
         du[1] = a + x^2 * y - (b + 1) * x + f * cos(z)
         du[2] = b * x - x^2 * y
         du[3] = w
     end
     u0 = Float64.(ATTRACTOR_DATA["ForcedBrusselator"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["ForcedBrusselator"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["ForcedBrusselator"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -1019,14 +987,14 @@ class WindmiReduced(DynSys):
 @doc make_docstring(WindmiReduced) WindmiReduced
 function WindmiReduced()
     function rhs(du, u, p, t)
+        @unpack a1, b1, b2, b3, d1, vsw = p
         i, v, p = u
-        a1, b1, b2, b3, d1, vsw = p
         du[1] = a1 * (vsw - v)
         du[2] = b1 * i - b2 * p^(1 / 2) - b3 * v
         du[3] = vsw^2 - p^(5 / 4) * vsw^(1 / 2) * (1 + tanh(d1 * (i - 1))) / 2
     end
     u0 = Float64.(ATTRACTOR_DATA["WindmiReduced"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["WindmiReduced"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["WindmiReduced"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -1047,13 +1015,13 @@ class MooreSpiegel(DynSys):
 function MooreSpiegel()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, eps = p
+        @unpack a, b, eps = p
         du[1] = y
         du[2] = a * z
         du[3] = -z + eps * y - y * x^2 - b * x
     end
     u0 = Float64.(ATTRACTOR_DATA["MooreSpiegel"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["MooreSpiegel"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["MooreSpiegel"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -1086,7 +1054,7 @@ class CoevolvingPredatorPrey(DynSys):
 function CoevolvingPredatorPrey()
     function rhs(du, u, p, t)
         x, y, alpha = u
-        a1, a2, a3, b1, b2, d1, d2, delta, k1, k2, k4, vv = p
+        @unpack a1, a2, a3, b1, b2, d1, d2, delta, k1, k2, k4, vv = p
         du[1] = x * (-((a3 * y) / (1 + b2 * x))
                  +
                  (a1 * alpha * (1 - k1 * x * (-alpha + alpha * delta))) / (1 + b1 * alpha)
@@ -1104,10 +1072,10 @@ function CoevolvingPredatorPrey()
                  d1 * (-2 * k2 * alpha * delta^2 + 4 * k4 * alpha^3 * delta^4))
     end
     u0 = Float64.(ATTRACTOR_DATA["CoevolvingPredatorPrey"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["CoevolvingPredatorPrey"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["CoevolvingPredatorPrey"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1125,16 +1093,16 @@ class KawczynskiStrizhak(DynSys):
 function KawczynskiStrizhak()
     function rhs(du, u, p, t)
         x, y, z = u
-        beta, gamma, kappa, mu = p
+        @unpack beta, gamma, kappa, mu = p
         du[1] = gamma * y - gamma * x^3 + 3 * mu * gamma * x
         du[2] = -2 * mu * x - y - z + beta
         du[3] = kappa * x - kappa * z
     end
     u0 = Float64.(ATTRACTOR_DATA["KawczynskiStrizhak"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["KawczynskiStrizhak"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["KawczynskiStrizhak"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1182,7 +1150,7 @@ class BelousovZhabotinsky(DynSys):
 function BelousovZhabotinsky()
     function rhs(du, u, p, t)
         x, z, v = u
-        c1, c10, c11, c12, c13, c2, c3, c4, c5, c6, c7, c8, c9, ci, kf, t0, y0, yb1, yb2, yb3, z0 = p
+        @unpack c1, c10, c11, c12, c13, c2, c3, c4, c5, c6, c7, c8, c9, ci, kf, t0, y0, yb1, yb2, yb3, z0 = p
         ybar = (1 / y0) * yb1 * z * v / (yb2 * x + yb3 + kf)
         if x < 0.0
             x = 0
@@ -1193,10 +1161,10 @@ function BelousovZhabotinsky()
         du[3] = c10 * x * ybar + c11 * ybar + c12 * x^2 + c13 * z * v - kf * v
     end
     u0 = Float64.(ATTRACTOR_DATA["BelousovZhabotinsky"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["BelousovZhabotinsky"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["BelousovZhabotinsky"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1214,16 +1182,16 @@ class IsothermalChemical(DynSys):
 function IsothermalChemical()
     function rhs(du, u, p, t)
         alpha, beta, gamma = u
-        delta, kappa, mu, sigma = p
+        @unpack delta, kappa, mu, sigma = p
         du[1] = mu * (kappa + gamma) - alpha * beta^2 - alpha
         du[2] = (alpha * beta^2 + alpha - beta) / sigma
         du[3] = (beta - gamma) / delta
     end
     u0 = Float64.(ATTRACTOR_DATA["IsothermalChemical"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["IsothermalChemical"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["IsothermalChemical"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1241,16 +1209,16 @@ class VallisElNino(DynSys):
 function VallisElNino()
     function rhs(du, u, p, t)
         x, y, z = u
-        b, c, p = p
+        @unpack b, c, p = p
         du[1] = b * y - c * x - c * p
         du[2] = -y + x * z
         du[3] = -z - x * y + 1
     end
     u0 = Float64.(ATTRACTOR_DATA["VallisElNino"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["VallisElNino"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["VallisElNino"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1268,16 +1236,16 @@ class RabinovichFabrikant(DynSys):
 function RabinovichFabrikant()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, g = p
+        @unpack a, g = p
         du[1] = y * z - y + y * x^2 + g * x
         du[2] = 3 * x * z + x - x^3 + g * y
         du[3] = -2 * a * z - 2 * x * y * z
     end
     u0 = Float64.(ATTRACTOR_DATA["RabinovichFabrikant"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["RabinovichFabrikant"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["RabinovichFabrikant"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1295,16 +1263,16 @@ class NoseHoover(DynSys):
 function NoseHoover()
     function rhs(du, u, p, t)
         x, y, z = u
-        a = p
+        @unpack a = p
         du[1] = y
         du[2] = -x + y * z
         du[3] = a - y^2
     end
     u0 = Float64.(ATTRACTOR_DATA["NoseHoover"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["NoseHoover"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["NoseHoover"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1322,16 +1290,16 @@ class Dadras(DynSys):
 function Dadras()
     function rhs(du, u, p, t)
         x, y, z = u
-        c, e, o, p, r = p
+        @unpack c, e, o, p, r = p
         du[1] = y - p * x + o * y * z
         du[2] = r * y - x * z + z
         du[3] = c * x * y - e * z
     end
     u0 = Float64.(ATTRACTOR_DATA["Dadras"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Dadras"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Dadras"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1349,16 +1317,16 @@ class RikitakeDynamo(DynSys):
 function RikitakeDynamo()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, mu = p
+        @unpack a, mu = p
         du[1] = -mu * x + y * z
         du[2] = -mu * y - a * x + x * z
         du[3] = 1 - x * y
     end
     u0 = Float64.(ATTRACTOR_DATA["RikitakeDynamo"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["RikitakeDynamo"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["RikitakeDynamo"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1379,7 +1347,7 @@ end
 function NuclearQuadrupole()
     function rhs(du, u, p, t)
         q1, q2, p1, p2 = u
-        a, b, d = p
+        @unpack a, b, d = p
         du[1] = a * p1
         du[2] = a * p2
         du[3] = -a * q1 + 3 / sqrt(2) * b * q1^2 - 3 / sqrt(2) * b * q2^2 - d * q1^3 -
@@ -1387,10 +1355,10 @@ function NuclearQuadrupole()
         du[4] = -a * q2 - 3 * sqrt(2) * b * q1 * q2 - d * q2 * q1^2 - d * q2^3
     end
     u0 = Float64.(ATTRACTOR_DATA["NuclearQuadrupole"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["NuclearQuadrupole"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["NuclearQuadrupole"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1413,10 +1381,10 @@ function PehlivanWei()
         du[3] = 2 - x * y - y^2
     end
     u0 = Float64.(ATTRACTOR_DATA["PehlivanWei"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["PehlivanWei"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["PehlivanWei"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1439,10 +1407,10 @@ function SprottTorus()
         du[3] = x - x^2 - y^2
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottTorus"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottTorus"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottTorus"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1460,16 +1428,16 @@ class SprottJerk(DynSys):
 function SprottJerk()
     function rhs(du, u, p, t)
         x, y, z = u
-        mu = p
+        @unpack mu = p
         du[1] = y
         du[2] = z
         du[3] = -x + y^2 - mu * z
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottJerk"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottJerk"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottJerk"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1501,10 +1469,10 @@ function SprottA()
         du[3] = 1 - y^2
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottA"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottA"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottA"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1527,10 +1495,10 @@ function SprottB()
         du[3] = 1 - x * y
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottB"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottB"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottB"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1553,10 +1521,10 @@ function SprottC()
         du[3] = 1 - x^2
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottC"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottC"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottC"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, p, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1579,7 +1547,7 @@ function SprottD()
         du[3] = x * z + 3 * y^2
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottD"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottD"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottD"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -1605,10 +1573,10 @@ function SprottE()
         du[3] = 1 - 4 * x
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottE"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottE"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottE"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1626,16 +1594,16 @@ class SprottF(DynSys):
 function SprottF()
     function rhs(du, u, p, t)
         x, y, z = u
-        a = p
+        @unpack a = p
         du[1] = y + z
         du[2] = -x + a * y
         du[3] = x^2 - z
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottF"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottF"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottF"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1653,16 +1621,16 @@ class SprottG(DynSys):
 function SprottG()
     function rhs(du, u, p, t)
         x, y, z = u
-        a = p
+        @unpack a = p
         du[1] = a * x + z
         du[2] = x * z - y
         du[3] = -x + y
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottG"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottG"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottG"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1680,16 +1648,16 @@ class SprottH(DynSys):
 function SprottH()
     function rhs(du, u, p, t)
         x, y, z = u
-        a = p
+        @unpack a = p
         du[1] = -y + z^2
         du[2] = x + a * y
         du[3] = x - z
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottH"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottH"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottH"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1707,16 +1675,16 @@ class SprottI(DynSys):
 function SprottI()
     function rhs(du, u, p, t)
         x, y, z = u
-        a = p
+        @unpack a = p
         du[1] = -a * y
         du[2] = x + z
         du[3] = x + y^2 - z
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottI"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottI"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottI"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1739,10 +1707,10 @@ function SprottJ()
         du[3] = -x + y + y^2
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottJ"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottJ"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottJ"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1760,16 +1728,16 @@ class SprottK(DynSys):
 function SprottK()
     function rhs(du, u, p, t)
         x, y, z = u
-        a = p
+        @unpack a = p
         du[1] = x * y - z
         du[2] = x - y
         du[3] = x + a * z
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottK"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottK"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottK"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1787,16 +1755,16 @@ class SprottL(DynSys):
 function SprottL()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b = p
+        @unpack a, b = p
         du[1] = y + b * z
         du[2] = a * x^2 - y
         du[3] = 1 - x
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottL"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottL"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottL"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1814,16 +1782,16 @@ class SprottM(DynSys):
 function SprottM()
     function rhs(du, u, p, t)
         x, y, z = u
-        a = p
+        @unpack a = p
         du[1] = -z
         du[2] = -x^2 - y
         du[3] = a + a * x + y
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottM"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottM"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottM"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1846,10 +1814,10 @@ function SprottN()
         du[3] = 1 + y - 2 * z
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottN"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottN"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottN"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1867,16 +1835,16 @@ class SprottO(DynSys):
 function SprottO()
     function rhs(du, u, p, t)
         x, y, z = u
-        a = p
+        @unpack a = p
         du[1] = y
         du[2] = x - z
         du[3] = x + x * z + a * y
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottO"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottO"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottO"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1894,16 +1862,16 @@ class SprottP(DynSys):
 function SprottP()
     function rhs(du, u, p, t)
         x, y, z = u
-        a = p
+        @unpack a = p
         du[1] = a * y + z
         du[2] = -x + y^2
         du[3] = x + y
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottP"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottP"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottP"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1921,16 +1889,16 @@ class SprottQ(DynSys):
 function SprottQ()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b = p
+        @unpack a, b = p
         du[1] = -z
         du[2] = x - y
         du[3] = a * x + y^2 + b * z
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottQ"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottQ"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottQ"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1948,16 +1916,16 @@ class SprottR(DynSys):
 function SprottR()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b = p
+        @unpack a, b = p
         du[1] = a - y
         du[2] = b + z
         du[3] = x * y - z
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottR"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottR"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottR"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -1980,10 +1948,10 @@ function SprottS()
         du[3] = 1 + x
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottS"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottS"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottS"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2006,10 +1974,10 @@ function SprottMore()
         du[3] = y^2 - exp(-(x^2))
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottMore"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SprottMore"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SprottMore"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2027,23 +1995,24 @@ class Arneodo(DynSys):
 function Arneodo()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = y
         du[2] = z
         du[3] = -a * x - b * y - c * z + d * x^3
     end
     u0 = Float64.(ATTRACTOR_DATA["Arneodo"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Arneodo"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Arneodo"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
 # class Coullet(Arneodo):
 #     pass
-function Coullet end
-originalcode(::typeof(Coullet)) = """
+
+function Rucklidge end
+originalcode(::typeof(Rucklidge)) = """
 class Rucklidge(DynSys):
     @staticjit
     def _rhs(x, y, z, t, a, b):
@@ -2052,20 +2021,20 @@ class Rucklidge(DynSys):
         zdot = -z + y ** 2
         return xdot, ydot, zdot
 """
-@doc make_docstring(Coullet) Coullet
+@doc make_docstring(Rucklidge) Rucklidge
 function Rucklidge()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b = p
+        @unpack a, b = p
         du[1] = -a * x + b * y - y * z
         du[2] = x
         du[3] = -z + y^2
     end
     u0 = Float64.(ATTRACTOR_DATA["Rucklidge"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Rucklidge"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Rucklidge"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2083,24 +2052,24 @@ class Sakarya(DynSys):
 function Sakarya()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c, h, p, q, r, s = p
+        @unpack a, b, c, h, p, q, r, s = p
         du[1] = a * x + h * y + s * y * z
         du[2] = -b * y - p * x + q * x * z
         du[3] = c * z - r * x * y
     end
     u0 = Float64.(ATTRACTOR_DATA["Sakarya"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Sakarya"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Sakarya"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
 # class LiuChen(Sakarya):
 #     pass
 
-function LiuChen end
-originalcode(::typeof(LiuChen)) = """
+function RayleighBenard end
+originalcode(::typeof(RayleighBenard)) = """
 class RayleighBenard(DynSys):
     @staticjit
     def _rhs(x, y, z, t, a, b, r):
@@ -2109,20 +2078,20 @@ class RayleighBenard(DynSys):
         zdot = x * y - b * z
         return xdot, ydot, zdot
 """
-@doc make_docstring(LiuChen) LiuChen
+@doc make_docstring(RayleighBenard) RayleighBenard
 function RayleighBenard()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, r = p
+        @unpack a, b, r = p
         du[1] = a * y - a * x
         du[2] = r * y - x * z
         du[3] = x * y - b * z
     end
     u0 = Float64.(ATTRACTOR_DATA["RayleighBenard"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["RayleighBenard"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["RayleighBenard"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2140,16 +2109,16 @@ class Finance(DynSys):
 function Finance()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c = p
+        @unpack a, b, c = p
         du[1] = (1 / b - a) * x + z + x * y
         du[2] = -b * y - x^2
         du[3] = -x - c * z
     end
     u0 = Float64.(ATTRACTOR_DATA["Finance"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Finance"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Finance"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2167,16 +2136,16 @@ class Bouali2(DynSys):
 function Bouali2()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, bb, c, g, m, y0 = p
+        @unpack a, b, bb, c, g, m, y0 = p
         du[1] = a * y0 * x - a * x * y - b * z
         du[2] = -g * y + g * y * x^2
         du[3] = -1.5 * m * x + m * bb * x * z - c * z
     end
     u0 = Float64.(ATTRACTOR_DATA["Bouali2"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Bouali2"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Bouali2"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2197,16 +2166,16 @@ class LuChenCheng(DynSys):
 function LuChenCheng()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c = p
+        @unpack a, b, c = p
         du[1] = -(a * b) / (a + b) * x - y * z + c
         du[2] = a * y + x * z
         du[3] = b * z + x * y
     end
     u0 = Float64.(ATTRACTOR_DATA["LuChenCheng"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["LuChenCheng"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["LuChenCheng"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2224,16 +2193,16 @@ class LuChen(DynSys):
 function LuChen()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c = p
+        @unpack a, b, c = p
         du[1] = a * y - a * x
         du[2] = -x * z + c * y
         du[3] = x * y - b * z
     end
     u0 = Float64.(ATTRACTOR_DATA["LuChen"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["LuChen"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["LuChen"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2251,16 +2220,16 @@ class QiChen(DynSys):
 function QiChen()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c = p
+        @unpack a, b, c = p
         du[1] = a * y - a * x + y * z
         du[2] = c * x + y - x * z
         du[3] = x * y - b * z
     end
     u0 = Float64.(ATTRACTOR_DATA["QiChen"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["QiChen"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["QiChen"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2278,16 +2247,16 @@ class ZhouChen(DynSys):
 function ZhouChen()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c, d, e = p
+        @unpack a, b, c, d, e = p
         du[1] = a * x + b * y + y * z
         du[2] = c * y - x * z + d * y * z
         du[3] = e * z - x * y
     end
     u0 = Float64.(ATTRACTOR_DATA["ZhouChen"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["ZhouChen"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["ZhouChen"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2305,16 +2274,16 @@ class BurkeShaw(DynSys):
 function BurkeShaw()
     function rhs(du, u, p, t)
         x, y, z = u
-        e, n = p
+        @unpack e, n = p
         du[1] = -n * x - n * y
         du[2] = y - n * x * z
         du[3] = n * x * y + e
     end
     u0 = Float64.(ATTRACTOR_DATA["BurkeShaw"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["BurkeShaw"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["BurkeShaw"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2332,16 +2301,16 @@ class Chen(DynSys):
 function Chen()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c = p
+        @unpack a, b, c = p
         du[1] = a * y - a * x
         du[2] = (c - a) * x - x * z + c * y
         du[3] = x * y - b * z
     end
     u0 = Float64.(ATTRACTOR_DATA["Chen"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Chen"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Chen"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2359,16 +2328,16 @@ class ChenLee(DynSys):
 function ChenLee()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c = p
+        @unpack a, b, c = p
         du[1] = a * x - y * z
         du[2] = b * y + x * z
         du[3] = c * z + 0.3333333333333333333333333 * x * y
     end
     u0 = Float64.(ATTRACTOR_DATA["ChenLee"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["ChenLee"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["ChenLee"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2386,16 +2355,16 @@ class WangSun(DynSys):
 function WangSun()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, d, e, f, q = p
+        @unpack a, b, d, e, f, q = p
         du[1] = a * x + q * y * z
         du[2] = b * x + d * y - x * z
         du[3] = e * z + f * x * y
     end
     u0 = Float64.(ATTRACTOR_DATA["WangSun"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["WangSun"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["WangSun"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2413,16 +2382,16 @@ class YuWang(DynSys):
 function YuWang()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = a * (y - x)
         du[2] = b * x - c * x * z
         du[3] = exp(x * y) - d * z
     end
     u0 = Float64.(ATTRACTOR_DATA["YuWang"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["YuWang"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["YuWang"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2440,16 +2409,16 @@ class YuWang2(DynSys):
 function YuWang2()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = a * (y - x)
         du[2] = b * x - c * x * z
         du[3] = cosh(x * y) - d * z
     end
     u0 = Float64.(ATTRACTOR_DATA["YuWang2"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["YuWang2"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["YuWang2"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan, jac = true, sparse = true)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2467,16 +2436,16 @@ class SanUmSrisuchinwong(DynSys):
 function SanUmSrisuchinwong()
     function rhs(du, u, p, t)
         x, y, z = u
-        a = p
+        @unpack a = p
         du[1] = y - x
         du[2] = -z * tanh(x)
         du[3] = -a + x * y + abs(y)
     end
     u0 = Float64.(ATTRACTOR_DATA["SanUmSrisuchinwong"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SanUmSrisuchinwong"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SanUmSrisuchinwong"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2494,16 +2463,16 @@ class DequanLi(DynSys):
 function DequanLi()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, c, d, eps, f, k = p
+        @unpack a, c, d, eps, f, k = p
         du[1] = a * y - a * x + d * x * z
         du[2] = k * x + f * y - x * z
         du[3] = c * z + x * y - eps * x^2
     end
     u0 = Float64.(ATTRACTOR_DATA["DequanLi"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["DequanLi"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["DequanLi"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2534,7 +2503,7 @@ class ArnoldWeb(DynSys):
 function ArnoldWeb()
     function rhs(du, u, p, t)
         p1, p2, x1, x2, z = u
-        mu, w = p
+        @unpack mu, w = p
         denom = 4 + cos(z) + cos(x1) + cos(x2)
         du[1] = -mu * sin(x1) / denom^2
         du[2] = -mu * sin(x2) / denom^2
@@ -2543,10 +2512,10 @@ function ArnoldWeb()
         du[5] = w
     end
     u0 = Float64.(ATTRACTOR_DATA["ArnoldWeb"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["ArnoldWeb"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["ArnoldWeb"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2564,16 +2533,16 @@ class NewtonLiepnik(DynSys):
 function NewtonLiepnik()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b = p
+        @unpack a, b = p
         du[1] = -a * x + y + 10 * y * z
         du[2] = -x - 0.4 * y + 5 * x * z
         du[3] = b * z - 5 * x * y
     end
     u0 = Float64.(ATTRACTOR_DATA["NewtonLiepnik"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["NewtonLiepnik"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["NewtonLiepnik"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2592,17 +2561,17 @@ class HyperRossler(DynSys):
 function HyperRossler()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = -y - z
         du[2] = x + a * y + w
         du[3] = b + x * z
         du[4] = -c * z + d * w
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperRossler"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperRossler"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperRossler"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2621,17 +2590,17 @@ class HyperLorenz(DynSys):
 function HyperLorenz()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = a * y - a * x + w
         du[2] = -x * z + c * x - y
         du[3] = -b * z + x * y
         du[4] = d * w - x * z
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperLorenz"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperLorenz"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperLorenz"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2650,17 +2619,17 @@ class HyperCai(DynSys):
 function HyperCai()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d, e = p
+        @unpack a, b, c, d, e = p
         du[1] = a * y - a * x
         du[2] = b * x + c * y - x * z + w
         du[3] = -d * z + y^2
         du[4] = -e * x
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperCai"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperCai"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperCai"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2679,17 +2648,17 @@ class HyperBao(DynSys):
 function HyperBao()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d, e = p
+        @unpack a, b, c, d, e = p
         du[1] = a * y - a * x + w
         du[2] = c * y - x * z
         du[3] = x * y - b * z
         du[4] = e * x + d * y * z
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperBao"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperBao"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperBao"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2708,17 +2677,17 @@ class HyperJha(DynSys):
 function HyperJha()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = a * y - a * x + w
         du[2] = -x * z + b * x - y
         du[3] = x * y - c * z
         du[4] = -x * z + d * w
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperJha"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperJha"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperJha"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2737,17 +2706,17 @@ class HyperQi(DynSys):
 function HyperQi()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d, e, f = p
+        @unpack a, b, c, d, e, f = p
         du[1] = a * y - a * x + y * z
         du[2] = b * x + b * y - x * z
         du[3] = -c * z - e * w + x * y
         du[4] = -d * w + f * z + x * y
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperQi"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperQi"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperQi"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2766,17 +2735,17 @@ class Qi(DynSys):
 function Qi()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = a * y - a * x + y * z * w
         du[2] = b * x + b * y - x * z * w
         du[3] = -c * z + x * y * w
         du[4] = -d * w + x * y * z
     end
     u0 = Float64.(ATTRACTOR_DATA["Qi"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Qi"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Qi"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2795,17 +2764,17 @@ class LorenzStenflo(DynSys):
 function LorenzStenflo()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = a * y - a * x + d * w
         du[2] = c * x - x * z - y
         du[3] = x * y - b * z
         du[4] = -x - a * w
     end
     u0 = Float64.(ATTRACTOR_DATA["LorenzStenflo"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["LorenzStenflo"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["LorenzStenflo"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2824,17 +2793,17 @@ class HyperYangChen(DynSys):
 function HyperYangChen()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = a * y - a * x
         du[2] = c * x - x * z + w
         du[3] = -b * z + x * y
         du[4] = -d * x
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperYangChen"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperYangChen"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperYangChen"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2853,17 +2822,17 @@ class HyperYan(DynSys):
 function HyperYan()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = a * y - a * x
         du[2] = (c - a) * x - x * z + c * y
         du[3] = -b * z + x * y - y * z + x * z - w
         du[4] = -d * w + y * z - x * z
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperYan"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperYan"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperYan"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2882,17 +2851,17 @@ class HyperXu(DynSys):
 function HyperXu()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d, e = p
+        @unpack a, b, c, d, e = p
         du[1] = a * y - a * x + w
         du[2] = b * x + e * x * z
         du[3] = -c * z - x * y
         du[4] = x * z - d * y
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperXu"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperXu"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperXu"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2911,17 +2880,17 @@ class HyperWang(DynSys):
 function HyperWang()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d, e = p
+        @unpack a, b, c, d, e = p
         du[1] = a * y - a * x
         du[2] = -x * z + b * x + w
         du[3] = -c * z + e * x^2
         du[4] = -d * x
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperWang"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperWang"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperWang"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2940,17 +2909,17 @@ class HyperPang(DynSys):
 function HyperPang()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = a * y - a * x
         du[2] = -x * z + c * y + w
         du[3] = x * y - b * z
         du[4] = -d * x - d * y
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperPang"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperPang"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperPang"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2969,17 +2938,17 @@ class HyperLu(DynSys):
 function HyperLu()
     function rhs(du, u, p, t)
         x, y, z, w = u
-        a, b, c, d = p
+        @unpack a, b, c, d = p
         du[1] = a * y - a * x + w
         du[2] = -x * z + c * y
         du[3] = x * y - b * z
         du[4] = d * w + x * z
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperLu"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HyperLu"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HyperLu"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -2997,16 +2966,16 @@ class SaltonSea(DynSys):
 function SaltonSea()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, d, k, lam, m, mu, r, th = p
+        @unpack a, d, k, lam, m, mu, r, th = p
         du[1] = r * x * (1 - (x + y) / k) - lam * x * y
         du[2] = lam * x * y - m * y * z / (y + a) - mu * y
         du[3] = th * y * z / (y + a) - d * z
     end
     u0 = Float64.(ATTRACTOR_DATA["SaltonSea"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["SaltonSea"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["SaltonSea"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
-    prob = ODEProblem(f, u0, tspan)
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 
@@ -3045,7 +3014,7 @@ class ExcitableCell(DynSys):
 function ExcitableCell()
     function rhs(du, u, p, t)
         v, n, c = u
-        gi, gkv, gkc, gl, rho, kc, vi, vk, vc, vl = p
+        @unpack gi, gkv, gkc, gl, rho, kc, vi, vk, vc, vl = p
         alpham = 0.1 * (25 + v) / (1 - exp(-0.1 * v - 2.5))
         betam = 4 * exp(-(v + 50) / 18)
         minf = alpham / (alpham + betam)
@@ -3067,7 +3036,7 @@ function ExcitableCell()
         du[3] = rho * (minf^3 * hinf * (vc - v) - kc * c)
     end
     u0 = Float64.(ATTRACTOR_DATA["ExcitableCell"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["ExcitableCell"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["ExcitableCell"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3100,7 +3069,7 @@ class CaTwoPlus(DynSys):
 function CaTwoPlus()
     function rhs(du, u, p, t)
         z, y, a = u
-        V0, V1, Vm2, Vm3, Vm5, V4, K2, Kz, Ky, Ka, K5, Kd, kf, k, beta, m, n, p, eps = p
+        @unpack V0, V1, Vm2, Vm3, Vm5, V4, K2, Kz, Ky, Ka, K5, Kd, kf, k, beta, m, n, p, eps = p
         Vin = V0 + V1 * beta
         V2 = Vm2 * (z^2) / (K2^2 + z^2)
         V3 = (Vm3 * (z^m) / (Kz^m + z^m)) * (y^2 / (Ky^2 + y^2)) * (a^4 / (Ka^4 + a^4))
@@ -3110,7 +3079,7 @@ function CaTwoPlus()
         du[3] = beta * V4 - V5 - eps * a
     end
     u0 = Float64.(ATTRACTOR_DATA["CaTwoPlus"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["CaTwoPlus"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["CaTwoPlus"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3150,7 +3119,19 @@ class CellCycle(DynSys):
 function CellCycle()
     function rhs(du, u, p, t)
         c1, m1, x1, c2, m2, x2 = u
-        Vm1, Um1, vi1, vi2, H1, H2, H3, H4, K1, K2, K3, K4, V2, U2, Vm3, Um3, V4, U4, Kc1, Kc2, vd1, vd2, Kd1, Kd2, kd1, kd2, Kim1, Kim2 = p
+        @unpack V2, Vm1, V4, vi, Kim, vd, Kc, K, Kd1, kd1, Vm3 = p
+        Vm1, Um1 = Vm1, Vm1
+        vi1, vi2 = vi, vi
+        H1, H2, H3, H4 = K, K, K, K
+        K1, K2, K3, K4 = K, K, K, K
+        V2, U2 = V2, V2
+        Vm3, Um3 = Vm3, Vm3
+        V4, U4 = V4, V4
+        Kc1, Kc2 = Kc, Kc
+        vd1, vd2 = vd, vd
+        Kd1, Kd2 = Kd1, Kd1
+        kd1, kd2 = kd1, kd1
+        Kim1, Kim2 = Kim, Kim
         V1 = Vm1 * c1 / (Kc1 + c1)
         U1 = Um1 * c2 / (Kc2 + c2)
         V3 = m1 * Vm3
@@ -3163,7 +3144,7 @@ function CellCycle()
         du[6] = U3 * (1 - x2) / (H3 + (1 - x2)) - U4 * x2 / (H4 + x2)
     end
     u0 = Float64.(ATTRACTOR_DATA["CellCycle"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["CellCycle"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["CellCycle"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3213,7 +3194,7 @@ class CircadianRhythm(DynSys):
 function CircadianRhythm()
     function rhs(du, u, p, t)
         m, fc, fs, fn, th = u
-        Ki, k, k1, k2, kd, kdn, km, ks, n, vd, vdn, vm, vmax, vmin = p
+        @unpack Ki, k, k1, k2, kd, kdn, km, ks, n, vd, vdn, vm, vmax, vmin = p
         vs = 2.5 * ((0.5 + 0.5 * cos(th)) + vmin) * (vmax - vmin)
         du[1] = vs * (Ki^n) / (Ki^n + fn^n) - vm * m / (km + m)
         du[2] = ks * m - k1 * fc + k2 * fn - k * fc
@@ -3222,7 +3203,7 @@ function CircadianRhythm()
         du[5] = 2 * pi / 24
     end
     u0 = Float64.(ATTRACTOR_DATA["CircadianRhythm"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["CircadianRhythm"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["CircadianRhythm"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3247,13 +3228,13 @@ class FluidTrampoline(DynSys):
 function FluidTrampoline()
     function rhs(du, u, p, t)
         x, y, th = u
-        gamma, psi, w = p
+        @unpack gamma, psi, w = p
         du[1] = y
         du[2] = -1 - (x < 0) * (x + psi * y * abs(y)) + gamma * cos(th)
         du[3] = w
     end
     u0 = Float64.(ATTRACTOR_DATA["FluidTrampoline"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["FluidTrampoline"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["FluidTrampoline"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3276,14 +3257,14 @@ end
 function Aizawa()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c, d, e, f = p
+        @unpack a, b, c, d, e, f = p
         du[1] = x * z - b * x - d * y
         du[2] = d * x + y * z - b * y
         du[3] = c + a * z - 1 / 3 * z^3 - x^2 - y^2 - e * z * x^2 - e * z * y^2 +
                 f * z * x^3
     end
     u0 = Float64.(ATTRACTOR_DATA["Aizawa"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Aizawa"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Aizawa"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3305,13 +3286,13 @@ class AnishchenkoAstakhov(DynSys):
 function AnishchenkoAstakhov()
     function rhs(du, u, p, t)
         x, y, z = u
-        mu, eta = p
+        @unpack mu, eta = p
         du[1] = mu * x + y - x * z
         du[2] = -x
         du[3] = -eta * z + eta * (x > 0) * x^2
     end
     u0 = Float64.(ATTRACTOR_DATA["AnishchenkoAstakhov"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["AnishchenkoAstakhov"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["AnishchenkoAstakhov"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3332,13 +3313,13 @@ class ShimizuMorioka(DynSys):
 function ShimizuMorioka()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b = p
+        @unpack a, b = p
         du[1] = y
         du[2] = x - a * y - x * z
         du[3] = -b * z + x^2
     end
     u0 = Float64.(ATTRACTOR_DATA["ShimizuMorioka"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["ShimizuMorioka"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["ShimizuMorioka"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3359,13 +3340,13 @@ class GenesioTesi(DynSys):
 function GenesioTesi()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c = p
+        @unpack a, b, c = p
         du[1] = y
         du[2] = z
         du[3] = -c * x - b * y - a * z + x^2
     end
     u0 = Float64.(ATTRACTOR_DATA["GenesioTesi"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["GenesioTesi"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["GenesioTesi"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3388,13 +3369,13 @@ class AtmosphericRegime(DynSys):
 function AtmosphericRegime()
     function rhs(du, u, p, t)
         x, y, z = u
-        alpha, beta, mu1, mu2, omega, sigma = p
+        @unpack alpha, beta, mu1, mu2, omega, sigma = p
         du[1] = mu1 * x + sigma * x * y
         du[2] = mu2 * y + omega * z + alpha * y * z + beta * z^2 - sigma * x^2
         du[3] = mu2 * z - omega * y - alpha * y^2 - beta * y * z
     end
     u0 = Float64.(ATTRACTOR_DATA["AtmosphericRegime"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["AtmosphericRegime"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["AtmosphericRegime"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3415,13 +3396,13 @@ class Hadley(DynSys):
 function Hadley()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, f, g = p
+        @unpack a, b, f, g = p
         du[1] = -y^2 - z^2 - a * x + a * f
         du[2] = x * y - b * x * z - y + g
         du[3] = b * x * y + x * z - z
     end
     u0 = Float64.(ATTRACTOR_DATA["Hadley"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Hadley"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Hadley"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3446,13 +3427,13 @@ class ForcedVanDerPol(DynSys):
 function ForcedVanDerPol()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, mu, w = p
+        @unpack a, mu, w = p
         du[1] = mu * (1 - x^2) * y - x + a * sin(z)
         du[2] = y
         du[3] = w
     end
     u0 = Float64.(ATTRACTOR_DATA["ForcedVanDerPol"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["ForcedVanDerPol"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["ForcedVanDerPol"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3477,13 +3458,13 @@ class ForcedFitzHughNagumo(DynSys):
 function ForcedFitzHughNagumo()
     function rhs(du, u, p, t)
         v, w, z = u
-        a, b, curr, f, gamma, omega = p
+        @unpack a, b, curr, f, gamma, omega = p
         du[1] = v - v^3 / 3 - w + curr + f * sin(z)
         du[2] = gamma * (v + a - b * w)
         du[3] = omega
     end
     u0 = Float64.(ATTRACTOR_DATA["ForcedFitzHughNagumo"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["ForcedFitzHughNagumo"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["ForcedFitzHughNagumo"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3504,13 +3485,13 @@ class HindmarshRose(DynSys):
 function HindmarshRose()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c, d, s, tx, tz = p
+        @unpack a, b, c, d, s, tx, tz = p
         du[1] = -x + 1 / tx * y - a / tx * x^3 + b / tx * x^2 + 1 / tx * z
         du[2] = -a * x^3 - (d - b) * x^2 + z
         du[3] = -s / tz * x - 1 / tz * z + c / tz
     end
     u0 = Float64.(ATTRACTOR_DATA["HindmarshRose"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HindmarshRose"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HindmarshRose"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3533,7 +3514,7 @@ class Colpitts(DynSys):
 function Colpitts()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c, d, e = p
+        @unpack a, b, c, d, e = p
         u = z - (e - 1)
         fz = -u * (1 - (u > 0))
         du[1] = y - a * fz
@@ -3541,7 +3522,7 @@ function Colpitts()
         du[3] = y - d * z
     end
     u0 = Float64.(ATTRACTOR_DATA["Colpitts"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Colpitts"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Colpitts"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3562,13 +3543,13 @@ class Laser(DynSys):
 function Laser()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c, d, h, k = p
+        @unpack a, b, c, d, h, k = p
         du[1] = a * y - a * x + b * y * z^2
         du[2] = c * x + d * x * z^2
         du[3] = h * z + k * x^2
     end
     u0 = Float64.(ATTRACTOR_DATA["Laser"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Laser"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Laser"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3589,13 +3570,13 @@ class Blasius(DynSys):
 function Blasius()
     function rhs(du, u, p, t)
         x, y, z = u
-        a, alpha1, alpha2, b, c, k1, k2, zs = p
+        @unpack a, alpha1, alpha2, b, c, k1, k2, zs = p
         du[1] = a * x - alpha1 * x * y / (1 + k1 * x)
         du[2] = -b * y + alpha1 * x * y / (1 + k1 * x) - alpha2 * y * z / (1 + k2 * y)
         du[3] = -c * (z - zs) + alpha2 * y * z / (1 + k2 * y)
     end
     u0 = Float64.(ATTRACTOR_DATA["Blasius"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Blasius"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Blasius"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3624,15 +3605,15 @@ class TurchinHanski(DynSys):
 @doc make_docstring(TurchinHanski) TurchinHanski
 function TurchinHanski()
     function rhs(du, u, p, t)
+        @unpack a, d, e, g, h, r, s = p
         n, p, z = u
-        a, d, e, g, h, r, s = p
         du[1] = r * (1 - e * sin(z)) * n - r * n^2 - g * n^2 / (n^2 + h^2) -
                 a * n * p / (n + d)
         du[2] = s * (1 - e * sin(z)) * p - s * p^2 / n
         du[3] = 2 * pi
     end
     u0 = Float64.(ATTRACTOR_DATA["TurchinHanski"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["TurchinHanski"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["TurchinHanski"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3661,14 +3642,14 @@ class StickSlipOscillator(DynSys):
 function StickSlipOscillator()
     function rhs(du, u, p, t)
         x, v, th = u
-        a, alpha, b, beta, eps, gamma, t0, vs, w = p
+        @unpack a, alpha, b, beta, eps, gamma, t0, vs, w = p
         tq = t0 * sign(v - vs) - alpha * v + beta * (v - vs)^3
         du[1] = v
         du[2] = eps * (gamma * cos(th) - tq) + a * x - b * x^3
         du[3] = w
     end
     u0 = Float64.(ATTRACTOR_DATA["StickSlipOscillator"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["StickSlipOscillator"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["StickSlipOscillator"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3689,13 +3670,13 @@ class HastingsPowell(DynSys):
 function HastingsPowell()
     function rhs(du, u, p, t)
         x, y, z = u
-        a1, a2, b1, b2, d1, d2 = p
+        @unpack a1, a2, b1, b2, d1, d2 = p
         du[1] = x * (1 - x) - y * a1 * x / (1 + b1 * x)
         du[2] = y * a1 * x / (1 + b1 * x) - z * a2 * y / (1 + b2 * y) - d1 * y
         du[3] = z * a2 * y / (1 + b2 * y) - d2 * z
     end
     u0 = Float64.(ATTRACTOR_DATA["HastingsPowell"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["HastingsPowell"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["HastingsPowell"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3718,15 +3699,18 @@ class CellularNeuralNetwork(DynSys):
 """
 @doc make_docstring(CellularNeuralNetwork) CellularNeuralNetwork
 function CellularNeuralNetwork()
+    function _f(x)
+        return 0.5 * (abs(x + 1) - abs(x - 1))
+    end
     function rhs(du, u, p, t)
         x, y, z = u
-        a, b, c, d = p
-        du[1] = -x + d * f(x) - b * f(y) - b * f(z)
-        du[2] = -y - b * f(x) + c * f(y) - a * f(z)
-        du[3] = -z - b * f(x) + a * f(y) + f(z)
+        @unpack a, b, c, d = p
+        du[1] = -x + d * _f(x) - b * _f(y) - b * _f(z)
+        du[2] = -y - b * _f(x) + c * _f(y) - a * _f(z)
+        du[3] = -z - b * _f(x) + a * _f(y) + _f(z)
     end
     u0 = Float64.(ATTRACTOR_DATA["CellularNeuralNetwork"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["CellularNeuralNetwork"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["CellularNeuralNetwork"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3750,11 +3734,11 @@ function BeerRNN()
         return 1.0 / (1.0 + exp(-x))
     end
     function rhs(du, u, p, t)
-        w, theta, tau = p
-        du .= (-u + w * sig.(u + theta)) / tau
+        @unpack w, theta, tau = p
+        du .= (-u .+ w * sig.(u .+ theta)) ./ tau
     end
     u0 = Float64.(ATTRACTOR_DATA["BeerRNN"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["BeerRNN"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["BeerRNN"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3778,13 +3762,13 @@ class Torus(DynSys):
 @doc make_docstring(Torus) Torus
 function Torus()
     function rhs(du, u, p, t)
-        a, n, r = p
+        @unpack a, n, r = p
         du[1] = (-a * n * sin(n * t)) * cos(t) - (r + a * cos(n * t)) * sin(t)
         du[2] = (-a * n * sin(n * t)) * sin(t) + (r + a * cos(n * t)) * cos(t)
         du[3] = a * n * cos(n * t)
     end
     u0 = Float64.(ATTRACTOR_DATA["Torus"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Torus"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Torus"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3806,12 +3790,15 @@ class Hopfield(DynSys):
 """
 @doc make_docstring(Hopfield) Hopfield
 function Hopfield()
+    function _f(x)
+        return (1 + tanh(x)) / 2
+    end
     function rhs(du, u, p, t)
-        k, tau, eps, beta = p
-        du .= -u / tau + f.(eps * k * u) - beta
+        @unpack k, tau, eps, beta = p
+        du .= -u ./ tau .+ _f.(eps .* k * u) .- beta
     end
     u0 = Float64.(ATTRACTOR_DATA["Hopfield"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["Hopfield"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["Hopfield"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3835,16 +3822,20 @@ class MacArthur(DynSys):
 """
 @doc make_docstring(MacArthur) MacArthur
 function MacArthur()
+    function growth_rate(rr, k, r)
+        u0 = rr ./ (k' .+ rr)
+        u = r .* u0'
+        return minimum(u, dims=2)
+    end
     function rhs(du, u, p, t)
-        m, r, k, d, s, c = p
-        nn, rr = u[1:5], u[6:10]
-        u0 = rr ./ (k .+ rr)
-        mu = r .* u0
+        @views nn, rr = u[1:5], u[6:10]
+        @unpack m, r, k, d, s, c = p
+        mu = growth_rate(rr, k, r)
         du[1:5] .= nn .* (mu .- m)
         du[6:10] .= d .* (s .- rr) .- c * (mu .* nn)
     end
     u0 = Float64.(ATTRACTOR_DATA["MacArthur"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["MacArthur"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["MacArthur"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
@@ -3864,14 +3855,14 @@ class ItikBanksTumor(DynSys):
 @doc make_docstring(ItikBanksTumor) ItikBanksTumor
 function ItikBanksTumor()
     function rhs(du, u, p, t)
-        a12, a13, a21, a31, d3, k3, r2, r3 = p
+        @unpack a12, a13, a21, a31, d3, k3, r2, r3 = p
         x, y, z = u
         du[1] = x * (1 - x) - a12 * x * y - a13 * x * z
         du[2] = r2 * y * (1 - y) - a21 * x * y
         du[3] = r3 * x * z / (x + k3) - a31 * x * z - d3 * z
     end
     u0 = Float64.(ATTRACTOR_DATA["ItikBanksTumor"]["initial_conditions"])
-    p = dict_to_componentarray(ATTRACTOR_DATA["ItikBanksTumor"]["parameters"])
+    p = format_parameters(ATTRACTOR_DATA["ItikBanksTumor"]["parameters"])
     tspan = (0.0, 1.0)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
