@@ -1,4 +1,5 @@
 ATTRACTOR_DATA = JSON.parsefile(joinpath(@__DIR__, "chaotic_attractors.json"))
+N = 30
 
 function Lorenz end
 originalcode(::typeof(Lorenz)) = """
@@ -38,7 +39,8 @@ function Lorenz()
     end
     u0 = Float64.(ATTRACTOR_DATA["Lorenz"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Lorenz"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Lorenz"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs, jac = jac)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -73,7 +75,8 @@ function LorenzBounded()
     end
     u0 = Float64.(ATTRACTOR_DATA["LorenzBounded"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["LorenzBounded"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["LorenzBounded"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -105,7 +108,8 @@ function LorenzCoupled()
     end
     u0 = Float64.(ATTRACTOR_DATA["LorenzCoupled"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["LorenzCoupled"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["LorenzCoupled"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -135,7 +139,8 @@ function Lorenz96()
     end
     u0 = Float64.(ATTRACTOR_DATA["Lorenz96"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Lorenz96"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Lorenz96"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -161,7 +166,8 @@ function Lorenz84()
     end
     u0 = Float64.(ATTRACTOR_DATA["Lorenz84"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Lorenz84"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Lorenz84"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -187,7 +193,8 @@ function Rossler()
     end
     u0 = Float64.(ATTRACTOR_DATA["Rossler"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Rossler"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Rossler"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -213,7 +220,8 @@ function Thomas()
     end
     u0 = Float64.(ATTRACTOR_DATA["Thomas"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Thomas"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Thomas"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -257,7 +265,8 @@ function DoublePendulum()
     end
     u0 = Float64.(ATTRACTOR_DATA["DoublePendulum"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["DoublePendulum"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["DoublePendulum"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -291,7 +300,8 @@ function SwingingAtwood()
     end
     u0 = Float64.(ATTRACTOR_DATA["SwingingAtwood"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SwingingAtwood"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SwingingAtwood"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -318,7 +328,8 @@ function GuckenheimerHolmes()
     end
     u0 = Float64.(ATTRACTOR_DATA["GuckenheimerHolmes"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["GuckenheimerHolmes"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["GuckenheimerHolmes"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -346,7 +357,8 @@ function HenonHeiles()
     end
     u0 = Float64.(ATTRACTOR_DATA["HenonHeiles"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HenonHeiles"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HenonHeiles"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -372,7 +384,8 @@ function Halvorsen()
     end
     u0 = Float64.(ATTRACTOR_DATA["Halvorsen"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Halvorsen"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Halvorsen"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -400,7 +413,8 @@ function Chua()
     end
     u0 = Float64.(ATTRACTOR_DATA["Chua"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Chua"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Chua"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -440,7 +454,8 @@ function MultiChua()
     end
     u0 = Float64.(ATTRACTOR_DATA["MultiChua"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["MultiChua"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["MultiChua"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -470,7 +485,8 @@ function Duffing()
     end
     u0 = Float64.(ATTRACTOR_DATA["Duffing"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Duffing"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Duffing"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -549,7 +565,8 @@ function DoubleGyre()
     end
     u0 = Float64.(ATTRACTOR_DATA["DoubleGyre"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["DoubleGyre"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["DoubleGyre"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -623,7 +640,8 @@ function BlinkingRotlet()
     end
     u0 = Float64.(ATTRACTOR_DATA["BlinkingRotlet"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["BlinkingRotlet"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["BlinkingRotlet"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -730,7 +748,8 @@ function LidDrivenCavityFlow()
     end
     u0 = Float64.(ATTRACTOR_DATA["LidDrivenCavityFlow"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["LidDrivenCavityFlow"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["LidDrivenCavityFlow"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -840,7 +859,8 @@ function OscillatingFlow()
     end
     u0 = Float64.(ATTRACTOR_DATA["OscillatingFlow"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["OscillatingFlow"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["OscillatingFlow"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -871,13 +891,14 @@ function BickleyJet()
         @unpack ell, eps, k, omega, sigma, u = p
         sechy = 1 / cosh(y / ell)
         un = @. k * (x - z * sigma)
-        du[1] = u * sechy^2 * (-1 - 2 * dot(cos.(un), eps) * tanh(y / ell))
-        du[2] = ell * u * sechy^2 * dot(eps .* k, sin.(un))
+        du[2] = u * sechy^2 * (-1 - 2 * dot(cos.(un), eps) * tanh(y / ell))
+        du[1] = ell * u * sechy^2 * dot(eps .* k, sin.(un))
         du[3] = omega
     end
     u0 = Float64.(ATTRACTOR_DATA["BickleyJet"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["BickleyJet"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["BickleyJet"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -908,7 +929,8 @@ function ArnoldBeltramiChildress()
     end
     u0 = Float64.(ATTRACTOR_DATA["ArnoldBeltramiChildress"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["ArnoldBeltramiChildress"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["ArnoldBeltramiChildress"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -935,7 +957,8 @@ function JerkCircuit()
     end
     u0 = Float64.(ATTRACTOR_DATA["JerkCircuit"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["JerkCircuit"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["JerkCircuit"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -966,7 +989,8 @@ function ForcedBrusselator()
     end
     u0 = Float64.(ATTRACTOR_DATA["ForcedBrusselator"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["ForcedBrusselator"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["ForcedBrusselator"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -995,7 +1019,8 @@ function WindmiReduced()
     end
     u0 = Float64.(ATTRACTOR_DATA["WindmiReduced"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["WindmiReduced"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["WindmiReduced"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1022,7 +1047,8 @@ function MooreSpiegel()
     end
     u0 = Float64.(ATTRACTOR_DATA["MooreSpiegel"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["MooreSpiegel"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["MooreSpiegel"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1073,7 +1099,8 @@ function CoevolvingPredatorPrey()
     end
     u0 = Float64.(ATTRACTOR_DATA["CoevolvingPredatorPrey"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["CoevolvingPredatorPrey"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["CoevolvingPredatorPrey"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1100,7 +1127,8 @@ function KawczynskiStrizhak()
     end
     u0 = Float64.(ATTRACTOR_DATA["KawczynskiStrizhak"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["KawczynskiStrizhak"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["KawczynskiStrizhak"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1111,31 +1139,8 @@ originalcode(::typeof(BelousovZhabotinsky)) = """
 class BelousovZhabotinsky(DynSys):
     @staticjit
     def _rhs(
-        x,
-        z,
-        v,
-        t,
-        c1,
-        c10,
-        c11,
-        c12,
-        c13,
-        c2,
-        c3,
-        c4,
-        c5,
-        c6,
-        c7,
-        c8,
-        c9,
-        ci,
-        kf,
-        t0,
-        y0,
-        yb1,
-        yb2,
-        yb3,
-        z0,
+        x, z, v, t,
+        c1, c10, c11, c12, c13, c2, c3, c4, c5, c6, c7, c8, c9, ci, kf, t0, y0, yb1, yb2, yb3, z0,
     ):
         ybar = (1 / y0) * yb1 * z * v / (yb2 * x + yb3 + kf)
         if x < 0.0:
@@ -1159,10 +1164,14 @@ function BelousovZhabotinsky()
         du[1] = c1 * x * ybar + c2 * ybar + c3 * x^2 + c4 * rf + c5 * x * z - kf * x
         du[2] = (c6 / z0) * rf + c7 * x * z + c8 * z * v + c9 * z - kf * z
         du[3] = c10 * x * ybar + c11 * ybar + c12 * x^2 + c13 * z * v - kf * v
+        du[1] *= t0
+        du[2] *= t0
+        du[3] *= t0
     end
     u0 = Float64.(ATTRACTOR_DATA["BelousovZhabotinsky"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["BelousovZhabotinsky"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["BelousovZhabotinsky"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1189,7 +1198,8 @@ function IsothermalChemical()
     end
     u0 = Float64.(ATTRACTOR_DATA["IsothermalChemical"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["IsothermalChemical"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["IsothermalChemical"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1216,7 +1226,8 @@ function VallisElNino()
     end
     u0 = Float64.(ATTRACTOR_DATA["VallisElNino"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["VallisElNino"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["VallisElNino"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1243,7 +1254,8 @@ function RabinovichFabrikant()
     end
     u0 = Float64.(ATTRACTOR_DATA["RabinovichFabrikant"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["RabinovichFabrikant"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["RabinovichFabrikant"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1270,7 +1282,8 @@ function NoseHoover()
     end
     u0 = Float64.(ATTRACTOR_DATA["NoseHoover"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["NoseHoover"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["NoseHoover"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1297,7 +1310,8 @@ function Dadras()
     end
     u0 = Float64.(ATTRACTOR_DATA["Dadras"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Dadras"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Dadras"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1324,7 +1338,8 @@ function RikitakeDynamo()
     end
     u0 = Float64.(ATTRACTOR_DATA["RikitakeDynamo"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["RikitakeDynamo"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["RikitakeDynamo"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1356,7 +1371,8 @@ function NuclearQuadrupole()
     end
     u0 = Float64.(ATTRACTOR_DATA["NuclearQuadrupole"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["NuclearQuadrupole"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["NuclearQuadrupole"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1382,7 +1398,8 @@ function PehlivanWei()
     end
     u0 = Float64.(ATTRACTOR_DATA["PehlivanWei"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["PehlivanWei"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["PehlivanWei"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1408,7 +1425,8 @@ function SprottTorus()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottTorus"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottTorus"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottTorus"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1435,7 +1453,8 @@ function SprottJerk()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottJerk"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottJerk"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottJerk"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1470,7 +1489,8 @@ function SprottA()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottA"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottA"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottA"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1496,7 +1516,8 @@ function SprottB()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottB"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottB"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottB"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1522,7 +1543,8 @@ function SprottC()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottC"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottC"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottC"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1548,7 +1570,8 @@ function SprottD()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottD"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottD"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottD"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1574,7 +1597,8 @@ function SprottE()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottE"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottE"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottE"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1601,7 +1625,8 @@ function SprottF()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottF"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottF"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottF"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1628,7 +1653,8 @@ function SprottG()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottG"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottG"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottG"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1655,7 +1681,8 @@ function SprottH()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottH"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottH"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottH"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1682,7 +1709,8 @@ function SprottI()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottI"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottI"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottI"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1708,7 +1736,8 @@ function SprottJ()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottJ"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottJ"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottJ"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1735,7 +1764,8 @@ function SprottK()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottK"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottK"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottK"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1762,7 +1792,8 @@ function SprottL()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottL"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottL"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottL"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1789,7 +1820,8 @@ function SprottM()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottM"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottM"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottM"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1815,7 +1847,8 @@ function SprottN()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottN"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottN"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottN"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1842,7 +1875,8 @@ function SprottO()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottO"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottO"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottO"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1869,7 +1903,8 @@ function SprottP()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottP"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottP"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottP"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1896,7 +1931,8 @@ function SprottQ()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottQ"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottQ"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottQ"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1923,7 +1959,8 @@ function SprottR()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottR"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottR"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottR"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1949,7 +1986,8 @@ function SprottS()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottS"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottS"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottS"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -1975,7 +2013,8 @@ function SprottMore()
     end
     u0 = Float64.(ATTRACTOR_DATA["SprottMore"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SprottMore"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SprottMore"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2002,7 +2041,8 @@ function Arneodo()
     end
     u0 = Float64.(ATTRACTOR_DATA["Arneodo"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Arneodo"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Arneodo"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2032,7 +2072,8 @@ function Rucklidge()
     end
     u0 = Float64.(ATTRACTOR_DATA["Rucklidge"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Rucklidge"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Rucklidge"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2059,7 +2100,8 @@ function Sakarya()
     end
     u0 = Float64.(ATTRACTOR_DATA["Sakarya"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Sakarya"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Sakarya"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2089,7 +2131,8 @@ function RayleighBenard()
     end
     u0 = Float64.(ATTRACTOR_DATA["RayleighBenard"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["RayleighBenard"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["RayleighBenard"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2116,7 +2159,8 @@ function Finance()
     end
     u0 = Float64.(ATTRACTOR_DATA["Finance"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Finance"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Finance"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2143,7 +2187,8 @@ function Bouali2()
     end
     u0 = Float64.(ATTRACTOR_DATA["Bouali2"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Bouali2"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Bouali2"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2173,7 +2218,8 @@ function LuChenCheng()
     end
     u0 = Float64.(ATTRACTOR_DATA["LuChenCheng"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["LuChenCheng"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["LuChenCheng"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2200,7 +2246,8 @@ function LuChen()
     end
     u0 = Float64.(ATTRACTOR_DATA["LuChen"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["LuChen"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["LuChen"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2227,7 +2274,8 @@ function QiChen()
     end
     u0 = Float64.(ATTRACTOR_DATA["QiChen"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["QiChen"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["QiChen"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2254,7 +2302,8 @@ function ZhouChen()
     end
     u0 = Float64.(ATTRACTOR_DATA["ZhouChen"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["ZhouChen"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["ZhouChen"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2281,7 +2330,8 @@ function BurkeShaw()
     end
     u0 = Float64.(ATTRACTOR_DATA["BurkeShaw"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["BurkeShaw"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["BurkeShaw"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2308,7 +2358,8 @@ function Chen()
     end
     u0 = Float64.(ATTRACTOR_DATA["Chen"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Chen"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Chen"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2335,7 +2386,8 @@ function ChenLee()
     end
     u0 = Float64.(ATTRACTOR_DATA["ChenLee"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["ChenLee"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["ChenLee"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2362,7 +2414,8 @@ function WangSun()
     end
     u0 = Float64.(ATTRACTOR_DATA["WangSun"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["WangSun"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["WangSun"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2389,7 +2442,8 @@ function YuWang()
     end
     u0 = Float64.(ATTRACTOR_DATA["YuWang"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["YuWang"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["YuWang"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2416,7 +2470,8 @@ function YuWang2()
     end
     u0 = Float64.(ATTRACTOR_DATA["YuWang2"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["YuWang2"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["YuWang2"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2443,7 +2498,8 @@ function SanUmSrisuchinwong()
     end
     u0 = Float64.(ATTRACTOR_DATA["SanUmSrisuchinwong"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SanUmSrisuchinwong"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SanUmSrisuchinwong"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2470,7 +2526,8 @@ function DequanLi()
     end
     u0 = Float64.(ATTRACTOR_DATA["DequanLi"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["DequanLi"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["DequanLi"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2513,7 +2570,8 @@ function ArnoldWeb()
     end
     u0 = Float64.(ATTRACTOR_DATA["ArnoldWeb"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["ArnoldWeb"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["ArnoldWeb"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2540,7 +2598,8 @@ function NewtonLiepnik()
     end
     u0 = Float64.(ATTRACTOR_DATA["NewtonLiepnik"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["NewtonLiepnik"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["NewtonLiepnik"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2569,7 +2628,8 @@ function HyperRossler()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperRossler"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperRossler"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperRossler"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2598,7 +2658,8 @@ function HyperLorenz()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperLorenz"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperLorenz"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperLorenz"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2627,7 +2688,8 @@ function HyperCai()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperCai"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperCai"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperCai"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2656,7 +2718,8 @@ function HyperBao()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperBao"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperBao"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperBao"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2685,7 +2748,8 @@ function HyperJha()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperJha"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperJha"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperJha"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2714,7 +2778,8 @@ function HyperQi()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperQi"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperQi"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperQi"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2743,7 +2808,8 @@ function Qi()
     end
     u0 = Float64.(ATTRACTOR_DATA["Qi"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Qi"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Qi"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2772,7 +2838,8 @@ function LorenzStenflo()
     end
     u0 = Float64.(ATTRACTOR_DATA["LorenzStenflo"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["LorenzStenflo"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["LorenzStenflo"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2801,7 +2868,8 @@ function HyperYangChen()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperYangChen"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperYangChen"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperYangChen"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2830,7 +2898,8 @@ function HyperYan()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperYan"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperYan"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperYan"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2859,7 +2928,8 @@ function HyperXu()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperXu"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperXu"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperXu"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2888,7 +2958,8 @@ function HyperWang()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperWang"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperWang"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperWang"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2917,7 +2988,8 @@ function HyperPang()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperPang"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperPang"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperPang"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2946,7 +3018,8 @@ function HyperLu()
     end
     u0 = Float64.(ATTRACTOR_DATA["HyperLu"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HyperLu"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HyperLu"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -2973,7 +3046,8 @@ function SaltonSea()
     end
     u0 = Float64.(ATTRACTOR_DATA["SaltonSea"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["SaltonSea"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["SaltonSea"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3037,7 +3111,8 @@ function ExcitableCell()
     end
     u0 = Float64.(ATTRACTOR_DATA["ExcitableCell"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["ExcitableCell"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["ExcitableCell"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3080,7 +3155,8 @@ function CaTwoPlus()
     end
     u0 = Float64.(ATTRACTOR_DATA["CaTwoPlus"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["CaTwoPlus"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["CaTwoPlus"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3145,7 +3221,8 @@ function CellCycle()
     end
     u0 = Float64.(ATTRACTOR_DATA["CellCycle"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["CellCycle"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["CellCycle"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3204,7 +3281,8 @@ function CircadianRhythm()
     end
     u0 = Float64.(ATTRACTOR_DATA["CircadianRhythm"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["CircadianRhythm"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["CircadianRhythm"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3235,7 +3313,8 @@ function FluidTrampoline()
     end
     u0 = Float64.(ATTRACTOR_DATA["FluidTrampoline"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["FluidTrampoline"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["FluidTrampoline"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3261,11 +3340,12 @@ function Aizawa()
         du[1] = x * z - b * x - d * y
         du[2] = d * x + y * z - b * y
         du[3] = c + a * z - 1 / 3 * z^3 - x^2 - y^2 - e * z * x^2 - e * z * y^2 +
-                f * z * x^3
+            f * z * x^3
     end
     u0 = Float64.(ATTRACTOR_DATA["Aizawa"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Aizawa"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Aizawa"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3293,7 +3373,8 @@ function AnishchenkoAstakhov()
     end
     u0 = Float64.(ATTRACTOR_DATA["AnishchenkoAstakhov"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["AnishchenkoAstakhov"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["AnishchenkoAstakhov"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3320,7 +3401,8 @@ function ShimizuMorioka()
     end
     u0 = Float64.(ATTRACTOR_DATA["ShimizuMorioka"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["ShimizuMorioka"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["ShimizuMorioka"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3347,7 +3429,8 @@ function GenesioTesi()
     end
     u0 = Float64.(ATTRACTOR_DATA["GenesioTesi"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["GenesioTesi"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["GenesioTesi"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3376,7 +3459,8 @@ function AtmosphericRegime()
     end
     u0 = Float64.(ATTRACTOR_DATA["AtmosphericRegime"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["AtmosphericRegime"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["AtmosphericRegime"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3403,7 +3487,8 @@ function Hadley()
     end
     u0 = Float64.(ATTRACTOR_DATA["Hadley"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Hadley"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Hadley"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3434,7 +3519,8 @@ function ForcedVanDerPol()
     end
     u0 = Float64.(ATTRACTOR_DATA["ForcedVanDerPol"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["ForcedVanDerPol"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["ForcedVanDerPol"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3465,7 +3551,8 @@ function ForcedFitzHughNagumo()
     end
     u0 = Float64.(ATTRACTOR_DATA["ForcedFitzHughNagumo"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["ForcedFitzHughNagumo"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["ForcedFitzHughNagumo"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3492,7 +3579,8 @@ function HindmarshRose()
     end
     u0 = Float64.(ATTRACTOR_DATA["HindmarshRose"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HindmarshRose"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HindmarshRose"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3523,7 +3611,8 @@ function Colpitts()
     end
     u0 = Float64.(ATTRACTOR_DATA["Colpitts"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Colpitts"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Colpitts"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3550,7 +3639,8 @@ function Laser()
     end
     u0 = Float64.(ATTRACTOR_DATA["Laser"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Laser"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Laser"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3577,7 +3667,8 @@ function Blasius()
     end
     u0 = Float64.(ATTRACTOR_DATA["Blasius"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Blasius"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Blasius"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3614,7 +3705,8 @@ function TurchinHanski()
     end
     u0 = Float64.(ATTRACTOR_DATA["TurchinHanski"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["TurchinHanski"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["TurchinHanski"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3650,7 +3742,8 @@ function StickSlipOscillator()
     end
     u0 = Float64.(ATTRACTOR_DATA["StickSlipOscillator"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["StickSlipOscillator"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["StickSlipOscillator"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3677,7 +3770,8 @@ function HastingsPowell()
     end
     u0 = Float64.(ATTRACTOR_DATA["HastingsPowell"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["HastingsPowell"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["HastingsPowell"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3711,7 +3805,8 @@ function CellularNeuralNetwork()
     end
     u0 = Float64.(ATTRACTOR_DATA["CellularNeuralNetwork"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["CellularNeuralNetwork"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["CellularNeuralNetwork"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3739,7 +3834,8 @@ function BeerRNN()
     end
     u0 = Float64.(ATTRACTOR_DATA["BeerRNN"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["BeerRNN"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["BeerRNN"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3769,7 +3865,8 @@ function Torus()
     end
     u0 = Float64.(ATTRACTOR_DATA["Torus"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Torus"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Torus"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3799,7 +3896,8 @@ function Hopfield()
     end
     u0 = Float64.(ATTRACTOR_DATA["Hopfield"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["Hopfield"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["Hopfield"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3823,7 +3921,7 @@ class MacArthur(DynSys):
 @doc make_docstring(MacArthur) MacArthur
 function MacArthur()
     function growth_rate(rr, k, r)
-        u0 = rr ./ (k' .+ rr)
+        u0 = rr ./ (k .+ rr)
         u = r .* u0'
         return minimum(u, dims=2)
     end
@@ -3836,7 +3934,8 @@ function MacArthur()
     end
     u0 = Float64.(ATTRACTOR_DATA["MacArthur"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["MacArthur"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["MacArthur"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -3863,7 +3962,8 @@ function ItikBanksTumor()
     end
     u0 = Float64.(ATTRACTOR_DATA["ItikBanksTumor"]["initial_conditions"])
     p = format_parameters(ATTRACTOR_DATA["ItikBanksTumor"]["parameters"])
-    tspan = (0.0, 1.0)
+    T = ATTRACTOR_DATA["ItikBanksTumor"]["period"] * N
+    tspan = (0.0, T)
     f = ODEFunction(rhs)
     prob = ODEProblem(f, u0, tspan, p)
     return prob
@@ -4115,7 +4215,7 @@ end
 # #             0.01,
 # #             0.01
 # #         ],
-# #         "dt": 0.01,
+# #         "period": 0.01,
 # #         "parameters": {
 # #             "w" : 0.0,
 # #             "a": [-2, -2, -1,  -0.88],

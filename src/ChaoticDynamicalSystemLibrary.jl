@@ -7,7 +7,7 @@ using SciMLBase
 using ComponentArrays
 using SimpleUnPack
 
-vecvec2mat(vv) = hcat(vv...)
+vecvec2mat(vv) = hcat(vv...)' # transpose is because of the way the data is stored in the JSON file
 
 function format_parameters(params::Dict)
     if isempty(params)
