@@ -10,7 +10,7 @@ using Aqua, JET
 
     @testset "Code quality (Aqua.jl)" begin
         Aqua.test_all(ChaoticDynamicalSystemLibrary;
-            ambiguities = (imported = false),)
+            ambiguities = (imported = false))
     end
 
     if VERSION >= v"1.7"
