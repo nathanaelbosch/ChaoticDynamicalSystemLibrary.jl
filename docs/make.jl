@@ -16,11 +16,11 @@ makedocs(;
         canonical = "https://nathanaelbosch.github.io/ChaoticDynamicalSystemLibrary.jl",
         edit_link = "main",
         assets = String[],
-        size_threshold_ignore = ["index.md"],),
+        size_threshold_ignore = ["index.md"]),
     pages = [
-        "Home" => "index.md",
-    ],)
+        "Home" => "index.md"
+    ])
 
 deploydocs(;
     repo = "github.com/nathanaelbosch/ChaoticDynamicalSystemLibrary.jl",
-    devbranch = "main",)
+    devbranch = "main")
