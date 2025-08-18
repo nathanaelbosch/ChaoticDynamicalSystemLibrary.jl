@@ -1172,7 +1172,8 @@ end
 function BelousovZhabotinsky()
     function rhs(du, u, p, t)
         x, z, v = u
-        @unpack c1, c10, c11, c12, c13, c2, c3, c4, c5, c6, c7, c8, c9, ci, kf, t0, y0, yb1, yb2, yb3, z0 = p
+        @unpack c1, c10, c11, c12, c13, c2, c3, c4, c5, c6, c7,
+        c8, c9, ci, kf, t0, y0, yb1, yb2, yb3, z0 = p
         ybar = (1 / y0) * yb1 * z * v / (yb2 * x + yb3 + kf)
         if x < 0.0
             x = 0
@@ -3236,7 +3237,8 @@ class CaTwoPlus(DynSys):
 function CaTwoPlus()
     function rhs(du, u, p, t)
         z, y, a = u
-        @unpack V0, V1, Vm2, Vm3, Vm5, V4, K2, Kz, Ky, Ka, K5, Kd, kf, k, beta, m, n, p, eps = p
+        @unpack V0, V1, Vm2, Vm3, Vm5, V4, K2, Kz, Ky, Ka, K5, Kd, kf, k, beta, m, n, p,
+        eps = p
         Vin = V0 + V1 * beta
         V2 = Vm2 * (z^2) / (K2^2 + z^2)
         V3 = (Vm3 * (z^m) / (Kz^m + z^m)) * (y^2 / (Ky^2 + y^2)) * (a^4 / (Ka^4 + a^4))
