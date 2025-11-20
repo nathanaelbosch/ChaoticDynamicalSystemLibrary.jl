@@ -9,7 +9,7 @@ using SimpleUnPack
 
 vecvec2mat(vv) = hcat(vv...)' # transpose is because of the way the data is stored in the JSON file
 
-function format_parameters(params::Dict)
+function format_parameters(params::JSON.Object)
     if isempty(params)
         return nothing
     end

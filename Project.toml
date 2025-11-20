@@ -13,7 +13,7 @@ SimpleUnPack = "ce78b400-467f-4804-87d8-8f486da07d0a"
 
 [compat]
 ComponentArrays = "0.15"
-JSON = "0.21"
+JSON = "1"
 LinearAlgebra = "1"
 Markdown = "1"
 SciMLBase = "1,2"
