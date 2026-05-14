@@ -1,6 +1,6 @@
 name = "ChaoticDynamicalSystemLibrary"
 uuid = "55704126-756f-498a-a54f-434b72ecbddd"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Nathanael Bosch <nathanael.bosch@uni-tuebingen.de> and contributors"]
 
 [deps]
