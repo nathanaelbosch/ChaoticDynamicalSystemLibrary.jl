@@ -136,6 +136,27 @@ using SafeTestsets
 
         prob = @test_nowarn System()
         @test prob isa ODEProblem
-        @test_nowarn solve(prob, Tsit5(), abstol = 1e-6, reltol = 1e-4)
+
+        name = string(System)
+
+        for property in [
+            ChaoticDynamicalSystemLibrary.correlation_dimension,
+            ChaoticDynamicalSystemLibrary.embedding_dimension,
+            ChaoticDynamicalSystemLibrary.hamiltonian,
+            ChaoticDynamicalSystemLibrary.kaplan_yorke_dimension,
+            ChaoticDynamicalSystemLibrary.lyapunov_spectrum_estimated,
+            ChaoticDynamicalSystemLibrary.maximum_lyapunov_estimated,
+            ChaoticDynamicalSystemLibrary.multiscale_entropy,
+            ChaoticDynamicalSystemLibrary.nonautonomous,
+            ChaoticDynamicalSystemLibrary.period,
+            ChaoticDynamicalSystemLibrary.pesin_entropy,
+        ]
+            if name != "SwingingAtwood" || property != ChaoticDynamicalSystemLibrary.multiscale_entropy
+                @test_nowarn property(name) # get property via string
+                @test_nowarn property(System) # get property via literal
+            end
+        end
+
+        @test_nowarn solve(prob, Tsit5(), abstol=1e-6, reltol=1e-4)
     end
 end

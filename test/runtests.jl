@@ -8,14 +8,16 @@ using Aqua, JET
 
     include("test_chaotic_attractors.jl")
 
+    include("test_string.jl")
+
     @testset "Code quality (Aqua.jl)" begin
         Aqua.test_all(ChaoticDynamicalSystemLibrary;
-            ambiguities = (imported = false))
+            ambiguities=(imported = false))
     end
 
     if VERSION >= v"1.7"
         @testset "Code linting (JET.jl)" begin
-            JET.test_package(ChaoticDynamicalSystemLibrary; target_defined_modules = true)
+            JET.test_package(ChaoticDynamicalSystemLibrary)
         end
     end
 end
